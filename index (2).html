@@ -1,0 +1,2461 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Operation Redacted</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Saira+Stencil+One&family=Special+Elite&display=swap">
+<style>
+/* CodeMirror 5.65.16 core (inlined; CSP blocks CDN stylesheets) */
+/* BASICS */
+
+.CodeMirror {
+  /* Set height, width, borders, and global font properties here */
+  font-family: monospace;
+  height: 300px;
+  color: black;
+  direction: ltr;
+}
+
+/* PADDING */
+
+.CodeMirror-lines {
+  padding: 4px 0; /* Vertical padding around content */
+}
+.CodeMirror pre.CodeMirror-line,
+.CodeMirror pre.CodeMirror-line-like {
+  padding: 0 4px; /* Horizontal padding of content */
+}
+
+.CodeMirror-scrollbar-filler, .CodeMirror-gutter-filler {
+  background-color: white; /* The little square between H and V scrollbars */
+}
+
+/* GUTTER */
+
+.CodeMirror-gutters {
+  border-right: 1px solid #ddd;
+  background-color: #f7f7f7;
+  white-space: nowrap;
+}
+.CodeMirror-linenumbers {}
+.CodeMirror-linenumber {
+  padding: 0 3px 0 5px;
+  min-width: 20px;
+  text-align: right;
+  color: #999;
+  white-space: nowrap;
+}
+
+.CodeMirror-guttermarker { color: black; }
+.CodeMirror-guttermarker-subtle { color: #999; }
+
+/* CURSOR */
+
+.CodeMirror-cursor {
+  border-left: 1px solid black;
+  border-right: none;
+  width: 0;
+}
+/* Shown when moving in bi-directional text */
+.CodeMirror div.CodeMirror-secondarycursor {
+  border-left: 1px solid silver;
+}
+.cm-fat-cursor .CodeMirror-cursor {
+  width: auto;
+  border: 0 !important;
+  background: #7e7;
+}
+.cm-fat-cursor div.CodeMirror-cursors {
+  z-index: 1;
+}
+.cm-fat-cursor .CodeMirror-line::selection,
+.cm-fat-cursor .CodeMirror-line > span::selection, 
+.cm-fat-cursor .CodeMirror-line > span > span::selection { background: transparent; }
+.cm-fat-cursor .CodeMirror-line::-moz-selection,
+.cm-fat-cursor .CodeMirror-line > span::-moz-selection,
+.cm-fat-cursor .CodeMirror-line > span > span::-moz-selection { background: transparent; }
+.cm-fat-cursor { caret-color: transparent; }
+@-moz-keyframes blink {
+  0% {}
+  50% { background-color: transparent; }
+  100% {}
+}
+@-webkit-keyframes blink {
+  0% {}
+  50% { background-color: transparent; }
+  100% {}
+}
+@keyframes blink {
+  0% {}
+  50% { background-color: transparent; }
+  100% {}
+}
+
+/* Can style cursor different in overwrite (non-insert) mode */
+.CodeMirror-overwrite .CodeMirror-cursor {}
+
+.cm-tab { display: inline-block; text-decoration: inherit; }
+
+.CodeMirror-rulers {
+  position: absolute;
+  left: 0; right: 0; top: -50px; bottom: 0;
+  overflow: hidden;
+}
+.CodeMirror-ruler {
+  border-left: 1px solid #ccc;
+  top: 0; bottom: 0;
+  position: absolute;
+}
+
+/* DEFAULT THEME */
+
+.cm-s-default .cm-header {color: blue;}
+.cm-s-default .cm-quote {color: #090;}
+.cm-negative {color: #d44;}
+.cm-positive {color: #292;}
+.cm-header, .cm-strong {font-weight: bold;}
+.cm-em {font-style: italic;}
+.cm-link {text-decoration: underline;}
+.cm-strikethrough {text-decoration: line-through;}
+
+.cm-s-default .cm-keyword {color: #708;}
+.cm-s-default .cm-atom {color: #219;}
+.cm-s-default .cm-number {color: #164;}
+.cm-s-default .cm-def {color: #00f;}
+.cm-s-default .cm-variable,
+.cm-s-default .cm-punctuation,
+.cm-s-default .cm-property,
+.cm-s-default .cm-operator {}
+.cm-s-default .cm-variable-2 {color: #05a;}
+.cm-s-default .cm-variable-3, .cm-s-default .cm-type {color: #085;}
+.cm-s-default .cm-comment {color: #a50;}
+.cm-s-default .cm-string {color: #a11;}
+.cm-s-default .cm-string-2 {color: #f50;}
+.cm-s-default .cm-meta {color: #555;}
+.cm-s-default .cm-qualifier {color: #555;}
+.cm-s-default .cm-builtin {color: #30a;}
+.cm-s-default .cm-bracket {color: #997;}
+.cm-s-default .cm-tag {color: #170;}
+.cm-s-default .cm-attribute {color: #00c;}
+.cm-s-default .cm-hr {color: #999;}
+.cm-s-default .cm-link {color: #00c;}
+
+.cm-s-default .cm-error {color: #f00;}
+.cm-invalidchar {color: #f00;}
+
+.CodeMirror-composing { border-bottom: 2px solid; }
+
+/* Default styles for common addons */
+
+div.CodeMirror span.CodeMirror-matchingbracket {color: #0b0;}
+div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #a22;}
+.CodeMirror-matchingtag { background: rgba(255, 150, 0, .3); }
+.CodeMirror-activeline-background {background: #e8f2ff;}
+
+/* STOP */
+
+/* The rest of this file contains styles related to the mechanics of
+   the editor. You probably shouldn't touch them. */
+
+.CodeMirror {
+  position: relative;
+  overflow: hidden;
+  background: white;
+}
+
+.CodeMirror-scroll {
+  overflow: scroll !important; /* Things will break if this is overridden */
+  /* 50px is the magic margin used to hide the element's real scrollbars */
+  /* See overflow: hidden in .CodeMirror */
+  margin-bottom: -50px; margin-right: -50px;
+  padding-bottom: 50px;
+  height: 100%;
+  outline: none; /* Prevent dragging from highlighting the element */
+  position: relative;
+  z-index: 0;
+}
+.CodeMirror-sizer {
+  position: relative;
+  border-right: 50px solid transparent;
+}
+
+/* The fake, visible scrollbars. Used to force redraw during scrolling
+   before actual scrolling happens, thus preventing shaking and
+   flickering artifacts. */
+.CodeMirror-vscrollbar, .CodeMirror-hscrollbar, .CodeMirror-scrollbar-filler, .CodeMirror-gutter-filler {
+  position: absolute;
+  z-index: 6;
+  display: none;
+  outline: none;
+}
+.CodeMirror-vscrollbar {
+  right: 0; top: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+.CodeMirror-hscrollbar {
+  bottom: 0; left: 0;
+  overflow-y: hidden;
+  overflow-x: scroll;
+}
+.CodeMirror-scrollbar-filler {
+  right: 0; bottom: 0;
+}
+.CodeMirror-gutter-filler {
+  left: 0; bottom: 0;
+}
+
+.CodeMirror-gutters {
+  position: absolute; left: 0; top: 0;
+  min-height: 100%;
+  z-index: 3;
+}
+.CodeMirror-gutter {
+  white-space: normal;
+  height: 100%;
+  display: inline-block;
+  vertical-align: top;
+  margin-bottom: -50px;
+}
+.CodeMirror-gutter-wrapper {
+  position: absolute;
+  z-index: 4;
+  background: none !important;
+  border: none !important;
+}
+.CodeMirror-gutter-background {
+  position: absolute;
+  top: 0; bottom: 0;
+  z-index: 4;
+}
+.CodeMirror-gutter-elt {
+  position: absolute;
+  cursor: default;
+  z-index: 4;
+}
+.CodeMirror-gutter-wrapper ::selection { background-color: transparent }
+.CodeMirror-gutter-wrapper ::-moz-selection { background-color: transparent }
+
+.CodeMirror-lines {
+  cursor: text;
+  min-height: 1px; /* prevents collapsing before first draw */
+}
+.CodeMirror pre.CodeMirror-line,
+.CodeMirror pre.CodeMirror-line-like {
+  /* Reset some styles that the rest of the page might have set */
+  -moz-border-radius: 0; -webkit-border-radius: 0; border-radius: 0;
+  border-width: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  margin: 0;
+  white-space: pre;
+  word-wrap: normal;
+  line-height: inherit;
+  color: inherit;
+  z-index: 2;
+  position: relative;
+  overflow: visible;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-variant-ligatures: contextual;
+  font-variant-ligatures: contextual;
+}
+.CodeMirror-wrap pre.CodeMirror-line,
+.CodeMirror-wrap pre.CodeMirror-line-like {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  word-break: normal;
+}
+
+.CodeMirror-linebackground {
+  position: absolute;
+  left: 0; right: 0; top: 0; bottom: 0;
+  z-index: 0;
+}
+
+.CodeMirror-linewidget {
+  position: relative;
+  z-index: 2;
+  padding: 0.1px; /* Force widget margins to stay inside of the container */
+}
+
+.CodeMirror-widget {}
+
+.CodeMirror-rtl pre { direction: rtl; }
+
+.CodeMirror-code {
+  outline: none;
+}
+
+/* Force content-box sizing for the elements where we expect it */
+.CodeMirror-scroll,
+.CodeMirror-sizer,
+.CodeMirror-gutter,
+.CodeMirror-gutters,
+.CodeMirror-linenumber {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+.CodeMirror-measure {
+  position: absolute;
+  width: 100%;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+
+.CodeMirror-cursor {
+  position: absolute;
+  pointer-events: none;
+}
+.CodeMirror-measure pre { position: static; }
+
+div.CodeMirror-cursors {
+  visibility: hidden;
+  position: relative;
+  z-index: 3;
+}
+div.CodeMirror-dragcursors {
+  visibility: visible;
+}
+
+.CodeMirror-focused div.CodeMirror-cursors {
+  visibility: visible;
+}
+
+.CodeMirror-selected { background: #d9d9d9; }
+.CodeMirror-focused .CodeMirror-selected { background: #d7d4f0; }
+.CodeMirror-crosshair { cursor: crosshair; }
+.CodeMirror-line::selection, .CodeMirror-line > span::selection, .CodeMirror-line > span > span::selection { background: #d7d4f0; }
+.CodeMirror-line::-moz-selection, .CodeMirror-line > span::-moz-selection, .CodeMirror-line > span > span::-moz-selection { background: #d7d4f0; }
+
+.cm-searching {
+  background-color: #ffa;
+  background-color: rgba(255, 255, 0, .4);
+}
+
+/* Used to force a border model for a node */
+.cm-force-border { padding-right: .1px; }
+
+@media print {
+  /* Hide the cursor when printing */
+  .CodeMirror div.CodeMirror-cursors {
+    visibility: hidden;
+  }
+}
+
+/* See issue #2901 */
+.cm-tab-wrap-hack:after { content: ''; }
+
+/* Help users use markselection to safely style text background */
+span.CodeMirror-selectedtext { background: none; }
+
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/sql/sql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/skulpt/1.2.0/skulpt.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/skulpt/1.2.0/skulpt-stdlib.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-asm.js"></script>
+<style>
+/* Layout: field-desk console. Left rail = tier/mission ladder + status dossier; right = live workspace that changes shape per language (terminal, Python IDE, DB client). */
+:root{
+  --desk:#0a0e13; --panel:#111823; --panel2:#0c121a; --line:#223044; --line2:#1a2533;
+  --text:#d6dde6; --muted:#7d8ba0; --dim:#4e5a6e;
+  --amber:#ffb23e; --amber2:#a8752a; --green:#5ad6a0; --green2:#2a5f47;
+  --cyan:#56b6e0; --red:#ff7a66; --violet:#b98cff; --gold:#ffd166;
+  --paper:#ccd2d4; --paper-ink:#1b2128; --paper-rule:#b4bcc1; --redact:#0a0c0f; --stamp:#c8382d;
+  --f-display:"Saira Stencil One",Impact,"Arial Narrow",sans-serif;
+  --f-type:"Special Elite","Courier New",monospace;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --sans:var(--f-mono);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--desk);color:var(--text);font-family:var(--f-mono);font-size:14px;line-height:1.5;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:16px 36px;
+  background-image:radial-gradient(1200px 600px at 80% -10%,rgba(255,178,62,.05),transparent 60%),radial-gradient(900px 500px at -10% 110%,rgba(86,182,224,.05),transparent 55%)}
+.wrap{max-width:1280px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+button{font-family:var(--f-mono);cursor:pointer}
+:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+::selection{background:var(--amber);color:#0a0e13}
+
+/* ---- top bar ---- */
+header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px;border-bottom:1px solid var(--line);padding-bottom:12px}
+.brand{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.brand h1{font-family:var(--f-display);font-weight:400;font-size:clamp(24px,4.5vw,40px);line-height:.9;margin:0;letter-spacing:.02em}
+.brand h1 span{color:var(--amber)}
+.brand .sub{color:var(--muted);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.hud{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.rank{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+.rank b{font-family:var(--f-display);font-weight:400;font-size:15px;letter-spacing:.05em;color:var(--gold)}
+.xpbar{width:150px;height:7px;background:#070b10;border:1px solid var(--line);position:relative;overflow:hidden}
+.xpbar i{position:absolute;inset:0;right:auto;background:linear-gradient(90deg,var(--amber2),var(--gold));transition:width .5s}
+.xpnum{font-size:10px;color:var(--muted);letter-spacing:.08em}
+.mini{display:flex;gap:8px}
+.chip{background:var(--panel);border:1px solid var(--line);padding:5px 9px;font-size:11px;color:var(--muted);letter-spacing:.06em;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.chip b{color:var(--text);font-weight:600}
+.chip.badges{cursor:pointer}
+.reset{background:transparent;border:1px solid var(--line2);color:var(--dim);font-size:10px;padding:5px 8px;letter-spacing:.1em}
+.reset:hover{color:var(--red);border-color:var(--red)}
+
+/* ---- track tabs ---- */
+.tracks{display:flex;gap:8px;flex-wrap:wrap}
+.track{background:var(--panel);color:var(--muted);border:1px solid var(--line);border-bottom-width:3px;padding:9px 16px;display:flex;flex-direction:column;gap:2px;min-width:132px;text-align:left}
+.track b{font-size:14px;color:var(--text);font-weight:600;letter-spacing:.04em}
+.track small{font-size:10px;letter-spacing:.11em;text-transform:uppercase}
+.track .tbadge{font-size:9px;color:var(--green);letter-spacing:.08em}
+.track[aria-pressed=true]{border-color:var(--amber);color:var(--amber);background:#15100a}
+.track[aria-pressed=true] b{color:var(--amber)}
+
+/* ---- main grid ---- */
+.board{display:grid;gap:14px;grid-template-columns:minmax(0,1fr);grid-template-areas:"rail" "work" "brief"}
+@media (min-width:1000px){.board{grid-template-columns:300px minmax(0,1fr);grid-template-areas:"rail work" "rail brief";align-items:start}}
+
+/* ---- left rail ---- */
+.rail{grid-area:rail;display:flex;flex-direction:column;gap:12px;min-width:0}
+.card{background:var(--panel);border:1px solid var(--line);min-width:0}
+.card>h3{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0;padding:10px 12px;border-bottom:1px solid var(--line2);display:flex;justify-content:space-between;align-items:center}
+.ladder{padding:8px}
+.tier{margin-bottom:6px}
+.tier-h{display:flex;align-items:center;gap:8px;padding:6px 6px;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.tier-h .tg{font-size:9px;padding:2px 6px;border:1px solid var(--line);color:var(--muted);letter-spacing:.1em}
+.tier.locked{opacity:.5}
+.tier.locked .tier-h::after{content:"🔒";margin-left:auto;font-size:11px}
+.tier[data-tn="0"] .tg{color:var(--green);border-color:var(--green2)}
+.tier[data-tn="1"] .tg{color:var(--cyan);border-color:#234}
+.tier[data-tn="2"] .tg{color:var(--amber);border-color:var(--amber2)}
+.tier[data-tn="3"] .tg{color:var(--violet);border-color:#44356b}
+.mlist{list-style:none;margin:0;padding:0 0 4px 4px}
+.mrow{display:flex;align-items:center;gap:8px;padding:6px 8px;font-size:12.5px;color:var(--muted);border-left:2px solid transparent;cursor:pointer;min-width:0}
+.mrow:hover{color:var(--text);background:var(--line2)}
+.mrow .dot{width:16px;height:16px;border:1px solid var(--line);border-radius:50%;flex-shrink:0;display:grid;place-items:center;font-size:9px}
+.mrow.done .dot{background:var(--green2);border-color:var(--green);color:var(--green)}
+.mrow.cur{color:var(--amber);border-left-color:var(--amber);background:#15100a}
+.mrow.cur .dot{border-color:var(--amber)}
+.mrow.locked{opacity:.45;cursor:not-allowed}
+.mrow .mt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mrow .boss{color:var(--violet);font-size:9px;margin-left:auto;letter-spacing:.1em}
+
+/* ---- dossier ---- */
+.dossier{background:var(--paper);color:var(--paper-ink);font-family:var(--f-type);padding:16px 15px 18px;position:relative;overflow:hidden;
+  background-image:repeating-linear-gradient(to bottom,transparent 0 25px,var(--paper-rule) 25px 26px);background-position:0 70px;box-shadow:0 10px 24px rgba(0,0,0,.4)}
+.dossier .dh{display:flex;justify-content:space-between;font-size:10px;letter-spacing:.1em;text-transform:uppercase;border-bottom:2px solid var(--paper-ink);padding-bottom:6px;background:var(--paper)}
+.dstamp{position:absolute;right:10px;top:40px;font-family:var(--f-display);font-size:19px;letter-spacing:.06em;color:var(--stamp);border:3px solid var(--stamp);padding:1px 7px;transform:rotate(-8deg);opacity:.8;pointer-events:none}
+.dstamp.dec{color:#1f7a45;border-color:#1f7a45;font-size:15px}
+.dtitle{font-family:var(--f-display);font-weight:400;font-size:18px;margin:8px 0 2px;letter-spacing:.03em}
+.dsub{font-size:11px;margin:0 0 8px;opacity:.75}
+.dlines{list-style:none;margin:0;padding:0}
+.dlines li{display:flex;gap:6px;align-items:baseline;min-height:26px;padding-top:4px;font-size:13px}
+.dlines li .dn{font-size:10px;opacity:.55;flex-shrink:0}
+.bar{display:inline-block;background:var(--redact);color:transparent;height:1.02em;vertical-align:-.12em;user-select:none;border-radius:1px}
+.secret{background:rgba(200,56,45,.12);border-bottom:2px solid var(--stamp);padding:0 2px;font-weight:bold}
+
+/* ---- center work area ---- */
+.work{grid-area:work;display:flex;flex-direction:column;gap:12px;min-width:0}
+.mission{background:var(--panel);border:1px solid var(--line);grid-area:brief;min-width:0}
+.mhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:12px 14px;border-bottom:1px solid var(--line2);flex-wrap:wrap}
+.mhead .mlvl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber)}
+.mhead h2{font-family:var(--f-display);font-weight:400;font-size:21px;margin:3px 0 0;letter-spacing:.02em;text-wrap:balance}
+.mbody{padding:12px 14px;display:flex;flex-direction:column;gap:11px}
+.brieftext{margin:0;color:var(--text);max-width:68ch}
+.task{border-left:3px solid var(--amber);padding:7px 0 7px 12px;color:var(--gold)}
+.task::before{content:"OBJECTIVE";display:block;font-size:9px;letter-spacing:.16em;color:var(--amber2);margin-bottom:2px}
+.crit{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px}
+.crit li{font-size:12px;color:var(--muted);padding-left:16px;position:relative}
+.crit li::before{content:"▸";position:absolute;left:2px;color:var(--amber2)}
+.ctxlabel{font-size:9px;letter-spacing:.15em;color:var(--muted);text-transform:uppercase}
+.ctx{margin:0;background:#070b10;border:1px solid var(--line2);padding:9px 11px;overflow-x:auto;font-size:12.5px;color:#b9c6d6;white-space:pre}
+
+/* workspace panels share a frame */
+.ws{background:#070b10;border:1px solid var(--line);display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.wsbar{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 12px;border-bottom:1px solid var(--line);font-size:11px;color:var(--muted);letter-spacing:.09em;text-transform:uppercase;background:var(--panel2)}
+.wsbar .fn{color:var(--text);font-weight:600;letter-spacing:.04em;text-transform:none}
+.wsbar .dots{display:flex;gap:5px}
+.wsbar .dots i{width:8px;height:8px;border-radius:50%;background:var(--line);display:block}
+.wsbar .dots i.r{background:#e05a4a}.wsbar .dots i.y{background:var(--amber)}.wsbar .dots i.g{background:var(--green)}
+.actions{display:flex;gap:7px;flex-wrap:wrap;padding:9px 12px;background:var(--panel2);border-top:1px solid var(--line)}
+.btn{font-size:12px;background:transparent;color:var(--muted);border:1px solid var(--line);padding:7px 13px;letter-spacing:.04em;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{color:var(--text);border-color:var(--muted)}
+.btn.run{color:var(--cyan);border-color:#2a4a5c}.btn.run:hover{background:#0d2430}
+.btn.submit{color:#07090c;background:var(--amber);border-color:var(--amber);font-weight:700}
+.btn.submit:hover{background:var(--gold)}
+.btn.ghost{margin-left:auto}
+.btn kbd{font-size:9px;opacity:.6;border:1px solid currentColor;border-radius:3px;padding:0 3px;font-family:inherit}
+.btn:disabled{opacity:.4;cursor:default}
+
+/* CodeMirror theming */
+.CodeMirror{height:auto;background:#070b10;color:#d6dde6;font-family:var(--f-mono);font-size:13.5px;line-height:1.55}
+.editor .CodeMirror{min-height:210px}
+.CodeMirror-gutters{background:#0a1017;border-right:1px solid var(--line2)}
+.CodeMirror-linenumber{color:#3a4557}
+.CodeMirror-cursor{border-left:1px solid var(--amber)}
+.cm-s-default .cm-keyword{color:var(--violet)}.cm-s-default .cm-def{color:var(--cyan)}
+.cm-s-default .cm-string,.cm-s-default .cm-string-2{color:var(--green)}
+.cm-s-default .cm-number{color:var(--gold)}.cm-s-default .cm-comment{color:#5a6678;font-style:italic}
+.cm-s-default .cm-operator{color:var(--amber)}.cm-s-default .cm-builtin,.cm-s-default .cm-variable-2{color:var(--cyan)}
+.CodeMirror-matchingbracket{color:var(--amber)!important;font-weight:700}
+
+/* output console */
+.console{font-size:13px;white-space:pre-wrap;word-break:break-word;padding:10px 12px;min-height:84px;max-height:240px;overflow:auto;background:#05080c}
+.console .muted{color:var(--muted)}.console .err{color:var(--red)}.console .ok{color:var(--green)}
+.console .label{color:var(--dim);font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+.console .reveal{color:#07090c;background:var(--amber);padding:1px 7px;font-weight:700;display:inline-block;margin:3px 0}
+.console .cmd{color:#ffe0a8}
+
+/* test checklist */
+.tests{border-top:1px solid var(--line2);padding:9px 12px;background:var(--panel2);display:none;flex-direction:column;gap:4px}
+.tests.show{display:flex}
+.tests .th{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.tc{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--muted)}
+.tc .mk{width:15px;flex-shrink:0;text-align:center}
+.tc.pass{color:var(--green)}.tc.pass .mk::before{content:"✔"}
+.tc.fail{color:var(--red)}.tc.fail .mk::before{content:"✗"}
+.tc.wait .mk::before{content:"○";color:var(--dim)}
+.tc .hidden-tag{color:var(--violet);font-size:9px;letter-spacing:.08em;margin-left:4px}
+
+/* terminal (linux) */
+.log{min-height:260px;max-height:360px;overflow-y:auto;padding:11px 13px;font-size:13.5px;color:var(--amber);text-shadow:0 0 6px rgba(255,178,62,.22);white-space:pre-wrap;word-break:break-word}
+.log .cmd{color:#ffe0a8}.log .out{color:var(--amber)}.log .sys{color:var(--muted);text-shadow:none}
+.log .err{color:var(--red);text-shadow:none}.log .ok{color:var(--green);text-shadow:0 0 6px rgba(90,214,160,.3)}
+.log .reveal{color:#07090c;background:var(--amber);text-shadow:none;display:inline-block;padding:1px 7px;font-weight:700;margin:2px 0}
+.log .intel{color:#c9d3df;text-shadow:none;border-left:2px solid var(--line);padding-left:10px;margin:3px 0}
+.log>div{margin-bottom:2px}
+form.prompt{display:flex;align-items:center;gap:8px;padding:9px 13px;border-top:1px solid var(--line);background:var(--panel2)}
+.ps{color:var(--green);white-space:nowrap;font-size:13px;flex-shrink:0;max-width:48%;overflow:hidden;text-overflow:ellipsis}
+#cmd{flex:1;min-width:0;background:transparent;border:0;color:#ffe0a8;font-family:var(--f-mono);font-size:16px;caret-color:var(--amber);padding:3px 0}
+#cmd:focus{outline:none}
+
+/* DB client: schema explorer + results grid */
+.dbwrap{display:grid;grid-template-columns:minmax(0,1fr);gap:0}
+@media (min-width:640px){.dbwrap{grid-template-columns:190px minmax(0,1fr)}}
+.schema{border-right:1px solid var(--line2);background:#060a0e;padding:9px 10px;font-size:12px;overflow:auto;max-height:230px}
+.schema .sh{font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+.tbl{margin-bottom:9px}
+.tbl>.tn{color:var(--cyan);font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px}
+.tbl>.tn::before{content:"▸";font-size:9px;transition:transform .15s;color:var(--muted)}
+.tbl.open>.tn::before{transform:rotate(90deg)}
+.tbl .cols{list-style:none;margin:3px 0 0;padding:0 0 0 14px;display:none}
+.tbl.open .cols{display:block}
+.tbl .cols li{color:var(--muted);font-size:11.5px;padding:1px 0;cursor:pointer}
+.tbl .cols li:hover{color:var(--text)}
+.tbl .cols li .ty{color:var(--dim);font-size:9.5px;margin-left:5px}
+.tbl .cols li .pk{color:var(--gold);font-size:9px;margin-left:4px}
+.tbl .cols li .fk{color:var(--violet);font-size:9px;margin-left:4px}
+.dbmain{display:flex;flex-direction:column;min-width:0}
+.grid-wrap{overflow:auto;max-height:260px;min-height:70px;background:#05080c}
+table.grid{border-collapse:collapse;width:100%;font-size:12.5px;font-variant-numeric:tabular-nums}
+table.grid th,table.grid td{border:1px solid var(--line2);padding:5px 9px;text-align:left;white-space:nowrap}
+table.grid th{background:var(--panel);color:var(--cyan);position:sticky;top:0;font-weight:600;letter-spacing:.03em}
+table.grid td{color:var(--text)}
+table.grid td.null{color:var(--dim);font-style:italic}
+table.grid tr:nth-child(even) td{background:#070c11}
+.gridmsg{padding:11px 12px;font-size:12.5px;color:var(--muted)}
+.gridmsg.err{color:var(--red)}.gridmsg.ok{color:var(--green)}
+.rowcount{font-size:10px;color:var(--muted);letter-spacing:.06em;text-transform:none}
+.history{border-top:1px solid var(--line2);max-height:0;overflow:hidden;transition:max-height .2s;background:var(--panel2)}
+.history.open{max-height:150px;overflow:auto}
+.history .hi{padding:5px 12px;font-size:11.5px;color:var(--muted);border-bottom:1px solid var(--line2);cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.history .hi:hover{color:var(--text);background:var(--line2)}
+
+/* hint / intel popover rows */
+.aux{display:flex;flex-direction:column;gap:8px}
+.auxbtns{display:flex;gap:7px;flex-wrap:wrap}
+.panel-note{background:var(--panel);border:1px solid var(--line);padding:10px 12px;font-size:12.5px;color:var(--text);display:none}
+.panel-note.show{display:block}
+.panel-note h4{font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin:0 0 6px}
+.panel-note pre{background:#070b10;border:1px solid var(--line2);padding:9px 11px;overflow-x:auto;font-size:12px;color:#c9d3df;margin:8px 0 0;white-space:pre}
+.panel-note .jobnote{border-left:3px solid var(--green2);padding-left:10px;margin-top:9px;color:var(--muted)}
+.panel-note .jobnote b{color:var(--green)}
+.drill{margin-top:9px;border-top:1px dashed var(--line2);padding-top:8px}
+.drill .q{color:var(--cyan)}
+.drill .reveal-a{background:transparent;border:1px solid var(--line);color:var(--muted);font-size:10px;padding:3px 8px;margin-top:5px;letter-spacing:.08em}
+.drill .a{margin-top:6px;color:var(--text);display:none}
+.drill .a.show{display:block}
+.hintbox{background:var(--panel);border:1px solid var(--amber2);padding:9px 12px;font-size:12.5px;color:var(--gold);display:none}
+.hintbox.show{display:block}
+.hintbox .hl{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber2);display:block;margin-bottom:3px}
+
+/* toast / badge popups */
+.toast-wrap{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:50;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;width:min(440px,92vw)}
+.toast{background:var(--panel);border:1px solid var(--amber);border-left-width:4px;padding:11px 15px;font-size:13px;color:var(--text);box-shadow:0 8px 28px rgba(0,0,0,.5);animation:pop .3s ease}
+.toast.badge{border-color:var(--gold);text-align:center}
+.toast.badge .bt{font-family:var(--f-display);color:var(--gold);font-size:17px;letter-spacing:.04em;display:block}
+.toast.rankup{border-color:var(--violet)}
+.toast .big{font-family:var(--f-display);font-size:15px;letter-spacing:.03em;color:var(--amber)}
+@keyframes pop{from{opacity:0;transform:translateY(12px)}to{opacity:1}}
+
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(5,8,12,.82);z-index:60;display:none;align-items:center;justify-content:center;padding:18px}
+.modal.show{display:flex}
+.sheet{background:var(--panel);border:1px solid var(--line);max-width:560px;width:100%;max-height:86vh;overflow:auto}
+.sheet h3{font-family:var(--f-display);font-weight:400;font-size:22px;margin:0;padding:15px 18px;border-bottom:1px solid var(--line2);letter-spacing:.03em;display:flex;justify-content:space-between;align-items:center}
+.sheet h3 button{background:transparent;border:0;color:var(--muted);font-size:20px}
+.sheet .sbody{padding:15px 18px}
+.badgegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.bcard{border:1px solid var(--line2);padding:11px;text-align:center;opacity:.4}
+.bcard.earned{opacity:1;border-color:var(--gold)}
+.bcard .bi{font-size:26px}
+.bcard .bn{font-family:var(--f-display);font-size:13px;color:var(--gold);letter-spacing:.03em;margin-top:5px}
+.bcard .bd{font-size:10.5px;color:var(--muted);margin-top:3px;line-height:1.35}
+.bcard.earned .bd{color:var(--text)}
+
+.cheat{grid-column:1/-1;color:var(--dim);font-size:11px;display:flex;gap:6px 16px;flex-wrap:wrap;border-top:1px solid var(--line2);padding-top:10px}
+.cheat code{color:var(--amber2)}
+
+@media (max-width:480px){.editor .CodeMirror{min-height:170px}.log{min-height:200px}.xpbar{width:110px}.dstamp{font-size:15px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <h1>OPERATION <span>REDACTED</span></h1>
+      <span class="sub">Code your way past the classification</span>
+    </div>
+    <div class="hud">
+      <div class="mini">
+        <span class="chip" title="Case files declassified">◆ <b id="hud-solved">0</b>/<span id="hud-total">0</span></span>
+        <span class="chip" title="Solve streak">▲ <b id="hud-streak">0</b> streak</span>
+        <span class="chip badges" id="hud-badges" title="Commendations">★ <b id="hud-bcount">0</b> badges</span>
+      </div>
+      <div class="rank">
+        <b id="hud-rank">NOOB</b>
+        <div class="xpbar" title="XP"><i id="hud-xp" style="width:0%"></i></div>
+        <span class="xpnum"><b id="hud-xpn">0</b> XP</span>
+      </div>
+      <button class="reset" id="reset">RESET</button>
+    </div>
+  </header>
+
+  <div class="tracks" role="group" aria-label="Choose a language">
+    <button class="track" data-t="python" type="button"><b>PYTHON</b><small>Op. Serpent</small><span class="tbadge" data-prog="python"></span></button>
+    <button class="track" data-t="sql" type="button"><b>SQL</b><small>Op. Ledger</small><span class="tbadge" data-prog="sql"></span></button>
+    <button class="track" data-t="linux" type="button"><b>LINUX CLI</b><small>Op. Dead Drop</small><span class="tbadge" data-prog="linux"></span></button>
+  </div>
+
+  <div class="board">
+    <aside class="rail">
+      <div class="card">
+        <h3><span id="rail-op">OPERATION</span><span class="rowcount" id="rail-file"></span></h3>
+        <div class="ladder" id="ladder"></div>
+      </div>
+      <div class="card dossier" id="dossier"></div>
+    </aside>
+
+    <section class="work">
+      <div class="ws" id="ws" aria-live="polite"></div>
+      <div class="aux">
+        <div class="auxbtns" id="auxbtns"></div>
+        <div class="hintbox" id="hintbox"></div>
+        <div class="panel-note" id="intelbox"></div>
+      </div>
+    </section>
+
+    <section class="mission" id="mission"></section>
+  </div>
+
+  <div class="cheat" id="cheat"></div>
+</div>
+
+<div class="toast-wrap" id="toasts"></div>
+
+<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+
+<script>
+window.TRACKS = {};
+/* ================= PYTHON TRACK ================= */
+const C = String.raw;
+TRACKS.python = {
+  key:'python', label:'Python', op:'OPERATION SERPENT', file:'DF-PY', ui:'ide', ext:'py',
+  tiers:[
+  /* ---------- NOOB ---------- */
+  { case:'THE FARM', intro:'Recruits who cannot talk to a machine never leave the Farm. Pass five drills to earn field status.',
+    missions:[
+    { id:'py-n1', title:'Wake the Console',
+      brief:'Your terminal at the Farm is dark. Headquarters is waiting for a sign of life. Every Python program you ever write starts with one move: putting text on the screen.',
+      task:'Print the exact words AGENT ONLINE.',
+      starter:C`# DRILL 1 · First signal
+# print() shows text on the screen. Text goes inside quotes.
+# Example:  print("hello")
+#
+# TODO: print the words AGENT ONLINE
+
+`,
+      out:[['Prints AGENT ONLINE', /^AGENT ONLINE$/m]],
+      hints:['Use print( ) with the words inside quotation marks.','Type exactly: print("AGENT ONLINE")'],
+      solution:C`print("AGENT ONLINE")`,
+      fb:[/print\(\s*(['"])AGENT ONLINE\1\s*\)/], fbOut:'AGENT ONLINE',
+      line:'Recruit status: {X}', secret:'SIGNAL CONFIRMED',
+      intel:{ note:'print() sends text to the screen, which programmers call standard output. Text in quotes is a string. Single and double quotes both work as long as they match. Each print() ends with a new line.',
+        syntax:C`print("hello")
+print('single quotes work too')
+print("a", "b", 3)    # prints: a b 3` } },
+
+    { id:'py-n2', title:'Cover Story',
+      brief:'You need a cover identity the system can remember. Variables are labeled boxes: you put a value in once and use the label everywhere after that.',
+      task:'Create a variable named clearance set to the number 3, then print: Agent NIGHTJAR, clearance 3',
+      starter:C`# DRILL 2 · Build your cover
+# A variable is a labeled box:   name = value
+codename = "NIGHTJAR"
+
+# TODO 1: make a variable called clearance and set it to the number 3
+
+
+# TODO 2: print exactly:   Agent NIGHTJAR, clearance 3
+# Tip: an f-string drops variables into text:  f"Hi {codename}"
+
+`,
+      tests:[['clearance is the number 3 (not text)','clearance == 3 and type(clearance) == int']],
+      out:[['Prints Agent NIGHTJAR, clearance 3', /^Agent NIGHTJAR, clearance 3$/m]],
+      hints:['Numbers do not get quotes. Then use an f-string with {codename} and {clearance} inside.','clearance = 3\nprint(f"Agent {codename}, clearance {clearance}")'],
+      solution:C`codename = "NIGHTJAR"
+clearance = 3
+print(f"Agent {codename}, clearance {clearance}")`,
+      fb:[/clearance\s*=\s*3\b/, /print\(/], fbOut:'Agent NIGHTJAR, clearance 3',
+      line:'Cover identity: {X}', secret:'NIGHTJAR, import/export broker',
+      intel:{ note:'A single = stores a value. Strings need quotes, numbers do not: "3" is text and 3 is a number. An f-string (a string with f in front) swaps anything in {curly braces} for its value.',
+        syntax:C`name = "WREN"        # str
+level = 4            # int
+pay = 41.5           # float
+active = True        # bool
+print(f"{name} is level {level}")
+print(type(level))   # <class 'int'>` } },
+
+    { id:'py-n3', title:'Expense Report',
+      brief:'The Farm audits every recruit. Your trip had three costs, and accounting wants to know what is left of the budget. Python does math the way a calculator does.',
+      task:'Store the leftover budget in a variable called remaining, then print it.',
+      starter:C`# DRILL 3 · Expense report
+budget = 5000
+hotel = 1890
+flights = 1435
+gear = 450
+
+# TODO: remaining = the budget minus all three costs
+
+
+# TODO: print remaining
+
+`,
+      tests:[['remaining equals 1225','remaining == 1225'],['Calculated, not typed in','"1225" not in __code']],
+      out:[['Prints 1225', /^1225$/m]],
+      hints:['Subtract each cost from budget with the - operator.','remaining = budget - hotel - flights - gear\nprint(remaining)'],
+      solution:C`budget = 5000
+hotel = 1890
+flights = 1435
+gear = 450
+remaining = budget - hotel - flights - gear
+print(remaining)`,
+      fb:[/remaining\s*=\s*budget\s*-/, /print\(\s*remaining\s*\)/], fbOut:'1225',
+      line:'Op funds remaining: {X}', secret:'$1,225',
+      intel:{ note:'Python follows normal math order. Use + - * / for arithmetic, // for division without the remainder, % for the remainder, and ** for powers. Keeping numbers in variables means one edit updates every calculation that uses them.',
+        syntax:C`7 / 2     # 3.5
+7 // 2    # 3
+7 % 2     # 1
+2 ** 10   # 1024
+total = 3 * (4 + 1)   # 15` } },
+
+    { id:'py-n4', title:'Checkpoint',
+      brief:'The guard at the checkpoint only opens the gate for clearance 4 or higher. Programs make decisions with if and else, and the indented lines under each one run only when that branch is chosen.',
+      task:'If clearance is 4 or more, print ACCESS GRANTED. Otherwise print ACCESS DENIED.',
+      starter:C`# DRILL 4 · Checkpoint
+clearance = 4
+
+# TODO: decide what to print.
+# Python uses a colon and an indented block:
+#
+#   if condition:
+#       do this
+#   else:
+#       do that
+
+`,
+      tests:[['Uses if and else','"if " in __code and "else" in __code'],['Compares clearance to 4','any(s in __code for s in [">= 4", ">=4", "> 3", ">3"])']],
+      out:[['Prints ACCESS GRANTED for clearance 4', /^ACCESS GRANTED$/m]],
+      hints:['The comparison for "4 or more" is clearance >= 4. Indent the print lines by four spaces.','if clearance >= 4:\n    print("ACCESS GRANTED")\nelse:\n    print("ACCESS DENIED")'],
+      solution:C`clearance = 4
+if clearance >= 4:
+    print("ACCESS GRANTED")
+else:
+    print("ACCESS DENIED")`,
+      fb:[/if\s+clearance\s*(>=\s*4|>\s*3)\s*:/, /else\s*:/], fbOut:'ACCESS GRANTED',
+      line:'Checkpoint code: {X}', secret:'GATE 7-ALPHA',
+      intel:{ note:'Comparisons give True or False: == equal, != not equal, < > <= >=. Use elif to check more cases in order. Indentation is part of Python syntax, so the standard is four spaces per level.',
+        syntax:C`if level >= 5:
+    print("director")
+elif level >= 3:
+    print("field")
+else:
+    print("desk")
+
+if active and level > 2:   # and / or / not
+    print("deploy")` } },
+
+    { id:'py-n5', title:'Roll Call',
+      brief:'Graduation night. The instructor wants every agent on the roster called out, one per line. A for loop repeats the same lines once for each item in a list.',
+      task:'Use a for loop to print each name with "> " in front, like > WREN',
+      starter:C`# DRILL 5 · Roll call
+roster = ["WREN", "KESTREL", "SWIFT", "HERON"]
+
+# TODO: loop over roster and print each name like:  > WREN
+
+`,
+      tests:[['Uses a for loop','"for " in __code and " in " in __code']],
+      out:[['Prints all four names in order', /^> WREN\n> KESTREL\n> SWIFT\n> HERON$/m]],
+      hints:['for name in roster:  then indent a print that adds "> " to name.','for name in roster:\n    print("> " + name)'],
+      solution:C`roster = ["WREN", "KESTREL", "SWIFT", "HERON"]
+for name in roster:
+    print("> " + name)`,
+      fb:[/for\s+\w+\s+in\s+roster\s*:/, /print\(/], fbOut:'> WREN\n> KESTREL\n> SWIFT\n> HERON',
+      line:'Graduating class: {X}', secret:'4 agents, cleared for field',
+      intel:{ note:'A list holds items in order inside [square brackets]. A for loop takes each item in turn. range(n) gives the numbers 0 to n-1 when you need a counter, and enumerate() gives you the position and the item together.',
+        syntax:C`for name in ["A", "B"]:
+    print(name)
+
+for i in range(3):        # 0, 1, 2
+    print(i)
+
+for i, name in enumerate(roster, start=1):
+    print(i, name)` } }
+    ]},
+
+  /* ---------- SKID ---------- */
+  { case:'SIGNALS', intro:'Field status granted. The listening post caught chatter all night, and someone has to clean it, count it and crack it.',
+    missions:[
+    { id:'py-s1', title:'Scrub the Intercept',
+      brief:'The intercept came in backwards and padded with junk # symbols. Strings have built-in methods you can chain together, each one handing its result to the next.',
+      task:'Set clean so it equals "Meet At Pier Nine", using string methods on raw.',
+      starter:C`raw = "  ##ENIN REIP## TA TEEM  "
+
+# Goal: clean == "Meet At Pier Nine"
+# Useful: .strip()  .replace(old, new)  [::-1]  .title()
+clean = raw
+
+print(clean)
+`,
+      tests:[['clean == "Meet At Pier Nine"','clean == "Meet At Pier Nine"'],['Built from raw','"raw." in __code or "raw[" in __code']],
+      out:[['Prints the clean message', /^Meet At Pier Nine$/m]],
+      hints:['Strip the spaces, remove every #, reverse with [::-1], then title-case it.','clean = raw.strip().replace("#", "")[::-1].title()'],
+      solution:C`raw = "  ##ENIN REIP## TA TEEM  "
+clean = raw.strip().replace("#", "")[::-1].title()
+print(clean)`,
+      fb:[/clean\s*=\s*raw\./, /\[::-1\]/, /\.title\(\)/], fbOut:'Meet At Pier Nine',
+      line:'Rendezvous: {X}', secret:'PIER NINE',
+      intel:{ note:'Strings never change in place. Every method returns a new string, which is why you assign the result. Slicing is [start:stop:step], and a step of -1 walks the string backwards.',
+        syntax:C`s = "  Field Agent  "
+s.strip()          # "Field Agent"
+s.lower()          # "  field agent  "
+s.replace("a","4") # swaps every match
+"a,b,c".split(",") # ["a", "b", "c"]
+"-".join(["a","b"])# "a-b"
+"agent"[0:3]       # "age"`,
+        job:'Most real data shows up messy: stray spaces from a form, odd capitalization, wrong separators. Cleaning strings before you compare them avoids a whole class of "why doesn’t this match?" bugs in log parsing and scripts.' } },
+
+    { id:'py-s2', title:'Word Count',
+      brief:'Analysts want to know which words show up most in the chatter. A dictionary maps keys to values, which makes it a natural tally sheet.',
+      task:'Fill counts so it maps every word to how many times it appears.',
+      starter:C`chatter = "vault at dawn the vault code changed meet at the vault".split()
+
+counts = {}
+for word in chatter:
+    # TODO: add 1 to this word's count
+    # counts.get(word, 0) returns 0 if the word is new
+    pass
+
+print(counts)
+`,
+      tests:[['counts["vault"] is 3','counts["vault"] == 3'],['Every word counted','counts == {"vault":3,"at":2,"dawn":1,"the":2,"code":1,"changed":1,"meet":1}']],
+      hints:['Inside the loop, set counts[word] to its current count plus 1.','counts[word] = counts.get(word, 0) + 1'],
+      solution:C`chatter = "vault at dawn the vault code changed meet at the vault".split()
+counts = {}
+for word in chatter:
+    counts[word] = counts.get(word, 0) + 1
+print(counts)`,
+      fb:[/counts\[\s*word\s*\]\s*=\s*counts\.get\(\s*word\s*,\s*0\s*\)\s*\+\s*1|counts\[\s*word\s*\]\s*\+=\s*1/], fbOut:"{'vault': 3, 'at': 2, 'dawn': 1, 'the': 2, 'code': 1, 'changed': 1, 'meet': 1}",
+      line:'Most repeated word: {X}', secret:'VAULT (3 mentions)',
+      intel:{ note:'A dict holds key: value pairs and looks keys up instantly. d[key] fails with KeyError on a missing key, while d.get(key, default) returns the default. Loop with .items() to get keys and values together.',
+        syntax:C`agent = {"name": "WREN", "level": 3}
+agent["level"] = 4           # update
+agent.get("station", "HQ")   # "HQ"
+for k, v in agent.items():
+    print(k, v)
+
+from collections import Counter
+Counter("aab").most_common(1)  # [('a', 2)]`,
+        job:'Counting things is half of security analysis: logins per user, requests per IP, errors per service. Once the loop version makes sense, collections.Counter does the same work in one line.' } },
+
+    { id:'py-s3', title:'Night Shift Detector',
+      brief:'Logins at odd hours are the first thing an analyst checks. Wrap that rule in a function so it can be reused on any log.',
+      task:'Write is_suspicious(hour) that returns True when hour is before 6 or after 22, otherwise False.',
+      starter:C`def is_suspicious(hour):
+    # TODO: return True if hour < 6 or hour > 22, otherwise False
+    pass
+
+
+print(is_suspicious(3), is_suspicious(14), is_suspicious(23))
+`,
+      tests:[['03:00 is suspicious','is_suspicious(3) is True'],['14:00 is normal','is_suspicious(14) is False'],['23:00 is suspicious','is_suspicious(23) is True'],['Edges: 06:00 and 22:00 are normal','is_suspicious(6) is False and is_suspicious(22) is False']],
+      hints:['A comparison already evaluates to True or False, so you can return it directly.','def is_suspicious(hour):\n    return hour < 6 or hour > 22'],
+      solution:C`def is_suspicious(hour):
+    return hour < 6 or hour > 22
+
+print(is_suspicious(3), is_suspicious(14), is_suspicious(23))`,
+      fb:[/def\s+is_suspicious\s*\(\s*hour\s*\)\s*:/, /return\s+.*hour\s*<\s*6.*or.*hour\s*>\s*22|return\s+.*hour\s*>\s*22.*or.*hour\s*<\s*6/s], fbOut:'True False True',
+      line:'Detector rule: {X}', secret:'flag logins before 06:00 or after 22:00',
+      intel:{ note:'def creates a function. Parameters are the inputs, and return hands back the output and ends the function. A function with no return gives back None, which is a common reason a test fails.',
+        syntax:C`def greet(name, title="Agent"):
+    return f"{title} {name}"
+
+greet("WREN")             # "Agent WREN"
+greet("WREN", "Director") # "Director WREN"`,
+        job:'Detection rules in SIEM tools and scripts are small functions like this one: the input is an event and the output is "flag" or "pass". Edge cases such as exactly 06:00 are where false positives come from, so write tests for the boundaries.' } },
+
+    { id:'py-s4', title:'Failed Logins',
+      brief:'You have a batch of login events as a list of dictionaries, which is the same shape you get from most APIs. Pull out the usernames that failed.',
+      task:'Set failed to the list of users where ok is False, in the same order, using a list comprehension.',
+      starter:C`logins = [
+    {"user": "wren",   "ok": True},
+    {"user": "raven",  "ok": False},
+    {"user": "magpie", "ok": True},
+    {"user": "osprey", "ok": False},
+    {"user": "swift",  "ok": False},
+]
+
+# Pattern:  [thing for item in items if condition]
+failed = []
+
+print(failed)
+`,
+      tests:[['failed == ["raven", "osprey", "swift"]','failed == ["raven", "osprey", "swift"]'],['Written as a list comprehension','" for " in __code.split("failed", 1)[1] and " if " in __code.split("failed", 1)[1]']],
+      hints:['The thing to keep is e["user"], and the condition is not e["ok"].','failed = [e["user"] for e in logins if not e["ok"]]'],
+      solution:C`logins = [
+    {"user": "wren",   "ok": True},
+    {"user": "raven",  "ok": False},
+    {"user": "magpie", "ok": True},
+    {"user": "osprey", "ok": False},
+    {"user": "swift",  "ok": False},
+]
+failed = [e["user"] for e in logins if not e["ok"]]
+print(failed)`,
+      fb:[/failed\s*=\s*\[.+\bfor\b.+\bin\s+logins\b.+\bif\b.+\]/], fbOut:"['raven', 'osprey', 'swift']",
+      line:'Accounts under attack: {X}', secret:'raven, osprey, swift',
+      intel:{ note:'A list comprehension builds a new list in one expression: what to keep, where it comes from, and an optional filter. It reads like a sentence and runs faster than appending in a loop.',
+        syntax:C`squares = [n * n for n in range(5)]
+names = [a["user"].upper() for a in logins]
+admins = [u for u in users if u.startswith("adm")]
+# dict version:
+by_user = {e["user"]: e["ok"] for e in logins}`,
+        job:'Filtering and reshaping records is everyday work in Python, whether you are trimming API results, pulling alerts out of a JSON export, or preparing rows for a report.' } },
+
+    { id:'py-s5', title:'Caesar’s Ghost',
+      brief:'The courier still uses a Caesar cipher: every letter is shifted forward 3 places in the alphabet. It is old, but it is a good workout for loops and character codes.',
+      task:'Write decode(text, shift) that shifts each letter A-Z back by shift and leaves other characters alone.',
+      starter:C`# ord("A") is 65 and chr(65) is "A".  Wrap around with % 26.
+def decode(text, shift):
+    result = ""
+    for ch in text:
+        # TODO: if ch is a letter, shift it back. Otherwise keep it.
+        pass
+    return result
+
+
+print(decode("PHHW DW WKH GRFNV", 3))
+`,
+      tests:[['Decodes the courier message','decode("PHHW DW WKH GRFNV", 3) == "MEET AT THE DOCKS"'],['Wraps around the alphabet','decode("ABC", 3) == "XYZ"'],['Keeps punctuation','decode("KHOOR, ZRUOG!", 3) == "HELLO, WORLD!"']],
+      hints:['For a letter: chr((ord(ch) - 65 - shift) % 26 + 65). Use ch.isalpha() to tell letters apart.','if ch.isalpha():\n    result += chr((ord(ch) - 65 - shift) % 26 + 65)\nelse:\n    result += ch'],
+      solution:C`def decode(text, shift):
+    result = ""
+    for ch in text:
+        if ch.isalpha():
+            result += chr((ord(ch) - 65 - shift) % 26 + 65)
+        else:
+            result += ch
+    return result
+
+print(decode("PHHW DW WKH GRFNV", 3))`,
+      fb:[/def\s+decode\s*\(/, /ord\(/, /chr\(/, /%\s*26/], fbOut:'MEET AT THE DOCKS',
+      line:'Courier message: {X}', secret:'MEET AT THE DOCKS',
+      intel:{ note:'Characters are stored as numbers. ord() turns a character into its code and chr() turns it back. The % operator wraps values into a range, which is how ciphers, clocks and ring buffers loop around.',
+        syntax:C`ord("A"), chr(90)        # 65, "Z"
+(25 + 3) % 26            # 2
+"x".isalpha(), "7".isdigit()
+"".join(reversed("abc")) # "cba"`,
+        job:'Nobody ships Caesar ciphers in production, but CTFs and security interviews love them. The real skill is turning a written rule into a loop with clean edge cases. The same thinking applies to encoding and decoding (base64, hex, URL encoding) during incident work.' } }
+    ]},
+
+  /* ---------- HIRABLE THREAT ---------- */
+  { case:'FIELD TOOLS', intro:'HQ is done babysitting. These are tickets from the SOC queue. Each one has acceptance criteria and hidden tests, the same as a real code review.',
+    missions:[
+    { id:'py-h1', title:'SOC-112 · Failed logins by IP',
+      brief:'Ticket from the SOC lead: "We need a helper that takes raw sshd log text and tells us how many failed logins came from each IP. It feeds the blocklist job."',
+      task:'Implement failed_by_ip(log_text) that returns a dict of {ip: count_of_FAIL_lines}.',
+      criteria:['Counts only FAIL lines','Returns {} for empty input','Passes hidden tests'],
+      starter:C`LOG = """2026-10-21 03:12:44 sshd FAIL user=root ip=203.0.113.66
+2026-10-21 03:12:47 sshd FAIL user=admin ip=203.0.113.66
+2026-10-21 08:01:10 sshd OK user=wren ip=10.0.4.21
+2026-10-21 09:15:02 sshd FAIL user=wren ip=10.0.4.21
+2026-10-21 11:40:39 sshd FAIL user=test ip=198.51.100.7
+2026-10-21 23:58:01 sshd FAIL user=root ip=203.0.113.66"""
+
+
+def failed_by_ip(log_text):
+    """Return a dict of {ip: number_of_FAIL_lines}."""
+    pass
+
+
+print(failed_by_ip(LOG))
+`,
+      tests:[['Counts the sample log','failed_by_ip(LOG) == {"203.0.113.66": 3, "10.0.4.21": 1, "198.51.100.7": 1}'],['Empty input returns {}','failed_by_ip("") == {}'],
+        ['hidden','failed_by_ip("2026-01-01 01:00:00 sshd OK user=a ip=1.1.1.1") == {}'],
+        ['hidden','failed_by_ip("2026-01-01 02:00:00 sshd FAIL user=a ip=9.9.9.9\\n2026-01-01 02:01:00 sshd FAIL user=b ip=9.9.9.9") == {"9.9.9.9": 2}']],
+      hints:['Loop over log_text.splitlines(). split() each line; the status is parts[3] and the ip is the last part after "=".','for line in log_text.splitlines():\n    parts = line.split()\n    if len(parts) > 3 and parts[3] == "FAIL":\n        ip = parts[-1].split("=")[1]\n        counts[ip] = counts.get(ip, 0) + 1'],
+      solution:C`LOG = """2026-10-21 03:12:44 sshd FAIL user=root ip=203.0.113.66
+2026-10-21 03:12:47 sshd FAIL user=admin ip=203.0.113.66
+2026-10-21 08:01:10 sshd OK user=wren ip=10.0.4.21
+2026-10-21 09:15:02 sshd FAIL user=wren ip=10.0.4.21
+2026-10-21 11:40:39 sshd FAIL user=test ip=198.51.100.7
+2026-10-21 23:58:01 sshd FAIL user=root ip=203.0.113.66"""
+
+
+def failed_by_ip(log_text):
+    counts = {}
+    for line in log_text.splitlines():
+        parts = line.split()
+        if len(parts) > 3 and parts[3] == "FAIL":
+            ip = parts[-1].split("=", 1)[1]
+            counts[ip] = counts.get(ip, 0) + 1
+    return counts
+
+
+print(failed_by_ip(LOG))`,
+      fb:[/def\s+failed_by_ip\s*\(/, /splitlines\(\)|split\(\s*["']\\n["']\s*\)/, /FAIL/, /return\s+\w+/], fbOut:"{'203.0.113.66': 3, '10.0.4.21': 1, '198.51.100.7': 1}",
+      line:'Loudest attacker: {X}', secret:'203.0.113.66 (3 failures)',
+      intel:{ note:'Parsing logs is mostly splitting: lines with splitlines(), fields with split(), and key=value pairs with split("=", 1). Guard against short or blank lines before you index into the parts, or a single bad line crashes the job.',
+        syntax:C`for line in text.splitlines():
+    parts = line.split()
+    if not parts:
+        continue
+    key, _, value = parts[-1].partition("=")`,
+        job:'This is a real task for junior SOC and sysadmin roles: turn auth.log, firewall or web logs into counts that feed a blocklist, a dashboard or an alert. At scale you would use a SIEM query, but quick Python like this is how you investigate when the SIEM does not have the field you need.',
+        drill:{q:'How would you make this work on a 20 GB log file?', a:'Do not read it all into memory. Open the file and loop over it line by line (for line in open(path)), which streams it. Count with a dict or Counter, and if the output is still too big, write partial results out or use a tool like awk or a SIEM.'} } },
+
+    { id:'py-h2', title:'NET-207 · Validate port input',
+      brief:'Ticket from the tooling team: "Our scanner wrapper crashes when people type junk into the port field. Give us a parser that never throws."',
+      task:'Implement parse_port(value) that returns an int from 1 to 65535, or None for anything invalid.',
+      criteria:['Accepts "22" and " 443 "','Rejects words, 0 and 70000','Never raises an exception'],
+      starter:C`def parse_port(value):
+    """Turn user input into a port number.
+    Return an int from 1 to 65535, or None if it is not a valid port."""
+    pass
+
+
+for raw in ["22", " 443 ", "http", "70000", "0"]:
+    print(repr(raw), "->", parse_port(raw))
+`,
+      tests:[['"22" gives 22','parse_port("22") == 22'],['Trims spaces: " 443 " gives 443','parse_port(" 443 ") == 443'],['"http" gives None','parse_port("http") is None'],['Out of range gives None','parse_port("70000") is None and parse_port("0") is None'],
+        ['hidden','parse_port(None) is None'],['hidden','parse_port("65535") == 65535 and parse_port("-5") is None']],
+      hints:['Wrap int(value) in try/except to catch ValueError and TypeError. Then check that the number is in range.','try:\n    port = int(str(value).strip()) if value is not None else None\nexcept (ValueError, TypeError):\n    return None'],
+      solution:C`def parse_port(value):
+    try:
+        port = int(value)
+    except (ValueError, TypeError):
+        return None
+    if 1 <= port <= 65535:
+        return port
+    return None`,
+      fb:[/def\s+parse_port\s*\(/, /try\s*:/, /except/, /65535/], fbOut:"'22' -> 22\n' 443 ' -> 443\n'http' -> None\n'70000' -> None\n'0' -> None",
+      line:'Scanner wrapper status: {X}', secret:'HARDENED, no crashes on bad input',
+      intel:{ note:'try/except catches errors so your program can decide what to do next. Catch specific exceptions (ValueError, TypeError) rather than a bare except, which also hides real bugs. Python allows chained comparisons like 1 <= x <= 65535.',
+        syntax:C`try:
+    n = int(text)
+except ValueError:
+    n = None
+else:
+    print("parsed")       # only if no error
+finally:
+    print("always runs")`,
+        job:'Input validation is a security control. Most injection and crash bugs come from trusting input. A pattern you will see in code review is "validate, normalize, reject loudly", and anything a user can type should go through something like this.',
+        drill:{q:'Why not just use a bare except: here?', a:'A bare except also catches KeyboardInterrupt, SystemExit and real bugs like NameError, so problems get silently swallowed. Catch only the exceptions you expect and let everything else surface.'} } },
+
+    { id:'py-h3', title:'IAM-031 · Agent class',
+      brief:'Ticket from identity and access management: "We want an Agent object instead of passing dicts around. Spec is in the docstring."',
+      task:'Build class Agent with codename, clearance, can_access(level), promote() capped at 5, and str() like NIGHTJAR [L3].',
+      criteria:['__init__ stores codename and clearance','can_access compares levels','promote never goes above 5','str(agent) == "NIGHTJAR [L3]"'],
+      starter:C`class Agent:
+    """An agent with a codename and a clearance level from 1 to 5.
+
+    - can_access(level) -> True if clearance >= level
+    - promote()         -> raise clearance by 1, never above 5
+    - str(agent)        -> 'NIGHTJAR [L3]'
+    """
+    pass
+
+
+a = Agent("NIGHTJAR", 3)
+print(a, a.can_access(4))
+`,
+      testPre:C`__a = Agent("NIGHTJAR", 3)
+__b = Agent("FALCON", 5)
+__b.promote()`,
+      tests:[['Stores codename and clearance','__a.codename == "NIGHTJAR" and __a.clearance == 3'],['can_access(3) is True, can_access(4) is False','__a.can_access(3) is True and __a.can_access(4) is False'],['promote() caps at 5','__b.clearance == 5'],['str() gives NIGHTJAR [L3]','str(__a) == "NIGHTJAR [L3]"'],
+        ['hidden','(lambda c: (c.promote(), c.clearance)[1])(Agent("X", 2)) == 3']],
+      hints:['You need __init__(self, codename, clearance), can_access(self, level), promote(self), and __str__(self). Every method takes self first.','def promote(self):\n    self.clearance = min(5, self.clearance + 1)\n\ndef __str__(self):\n    return f"{self.codename} [L{self.clearance}]"'],
+      solution:C`class Agent:
+    def __init__(self, codename, clearance):
+        self.codename = codename
+        self.clearance = clearance
+
+    def can_access(self, level):
+        return self.clearance >= level
+
+    def promote(self):
+        self.clearance = min(5, self.clearance + 1)
+
+    def __str__(self):
+        return f"{self.codename} [L{self.clearance}]"
+
+
+a = Agent("NIGHTJAR", 3)
+print(a, a.can_access(4))`,
+      fb:[/class\s+Agent/, /def\s+__init__\s*\(\s*self/, /def\s+can_access/, /def\s+promote/, /def\s+__str__/], fbOut:'NIGHTJAR [L3] False',
+      line:'Access model: {X}', secret:'role-based, max level 5',
+      intel:{ note:'A class bundles data (attributes on self) with the functions that use it (methods). __init__ runs when you create an object. Dunder methods like __str__ and __eq__ hook into Python features such as print() and ==.',
+        syntax:C`class Box:
+    count = 0                 # shared by all boxes
+    def __init__(self, label):
+        self.label = label    # one per box
+        Box.count += 1
+    def __repr__(self):
+        return f"Box({self.label!r})"
+
+from dataclasses import dataclass   # CPython: less boilerplate`,
+        job:'Most production Python is built from classes: API clients, models in Django or SQLAlchemy, plugins. Reading a class spec and implementing it exactly, edge cases included, is a common take-home assignment.',
+        drill:{q:'What is the difference between __str__ and __repr__?', a:'__str__ is the friendly version for print() and end users. __repr__ is the unambiguous developer version, shown in the REPL and inside lists, and ideally it looks like code that would recreate the object. If only __repr__ is defined, print() uses it.'} } },
+
+    { id:'py-h4', title:'SOC-118 · Top offenders',
+      brief:'Ticket from the SOC lead: "The dashboard needs the top N IPs by hit count. Ties have to be deterministic or the screenshots never match."',
+      task:'Implement top_offenders(counts, n=3) returning the n (ip, count) pairs with the most hits; ties sort by IP as text.',
+      criteria:['Highest count first','Ties broken by IP, A to Z','n defaults to 3 and can be larger than the data'],
+      starter:C`hits = {"203.0.113.66": 41, "198.51.100.7": 12, "10.0.4.21": 3,
+        "192.0.2.14": 41, "198.51.100.9": 12}
+
+
+def top_offenders(counts, n=3):
+    """Return the n (ip, count) pairs with the most hits, highest first.
+    Ties sort by IP address as text, A to Z."""
+    pass
+
+
+print(top_offenders(hits))
+`,
+      tests:[['Default top 3 is correct','[tuple(x) for x in top_offenders(hits)] == [("192.0.2.14", 41), ("203.0.113.66", 41), ("198.51.100.7", 12)]'],['n=1 works','[tuple(x) for x in top_offenders(hits, 1)] == [("192.0.2.14", 41)]'],
+        ['hidden','len(top_offenders(hits, 10)) == 5'],['hidden','top_offenders({}) == []']],
+      hints:['sorted(counts.items(), key=...) sorts the pairs. A key of (-count, ip) sorts count high to low and ip A to Z.','return sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))[:n]'],
+      solution:C`hits = {"203.0.113.66": 41, "198.51.100.7": 12, "10.0.4.21": 3,
+        "192.0.2.14": 41, "198.51.100.9": 12}
+
+
+def top_offenders(counts, n=3):
+    return sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))[:n]
+
+
+print(top_offenders(hits))`,
+      fb:[/def\s+top_offenders\s*\(/, /sorted\(/, /key\s*=/, /\[\s*:\s*n\s*\]/], fbOut:"[('192.0.2.14', 41), ('203.0.113.66', 41), ('198.51.100.7', 12)]",
+      line:'Blocklist priority #1: {X}', secret:'192.0.2.14',
+      intel:{ note:'sorted() returns a new sorted list and .sort() sorts a list in place. key= takes a function that gives the value to sort by. Returning a tuple sorts by several fields, and negating a number flips its direction.',
+        syntax:C`sorted(nums, reverse=True)
+sorted(words, key=len)
+sorted(rows, key=lambda r: (r["dept"], -r["pay"]))
+import heapq
+heapq.nlargest(3, counts.items(), key=lambda kv: kv[1])`,
+        job:'Deterministic output matters in real systems. Reports, tests and diffs all break when ties come out in random order. Interviewers watch for whether you ask "how should ties be handled?" before you start coding.',
+        drill:{q:'What is the time complexity of this solution, and can you do better for small n?', a:'Sorting everything is O(m log m) for m IPs. For a small n, heapq.nlargest is O(m log n), which wins when m is huge and n is tiny.'} } },
+
+    { id:'py-h5', title:'DFIR-044 · Extract IOCs',
+      brief:'Ticket from incident response: "Pull every IPv4 indicator out of this analyst report so we can bulk-import them. No version numbers, no duplicates."',
+      task:'Implement extract_ips(text) returning a sorted list of unique IPv4 addresses, using the re module.',
+      criteria:['Finds all three IPs in the report','Skips version numbers like 2.4.1','No duplicates, sorted'],
+      starter:C`import re
+
+REPORT = """Beacon to 203.0.113.66 at 03:12, retry via 198.51.100.7.
+Staging box 10.0.4.21 talked to 203.0.113.66 again. Implant version 2.4.1
+was recovered. Not addresses: 999.1.1 and 1.2.3."""
+
+
+def extract_ips(text):
+    """Return a sorted list of unique IPv4 addresses found in text."""
+    pass
+
+
+print(extract_ips(REPORT))
+`,
+      tests:[['Finds the three IPs','extract_ips(REPORT) == ["10.0.4.21", "198.51.100.7", "203.0.113.66"]'],['Empty text gives []','extract_ips("") == []'],
+        ['hidden','extract_ips("a 8.8.8.8 b 8.8.8.8 c 1.1.1.1") == ["1.1.1.1", "8.8.8.8"]']],
+      hints:['An IPv4 is four groups of 1-3 digits joined by dots: r"\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b". Use re.findall, then set() and sorted().','return sorted(set(re.findall(r"\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b", text)))'],
+      solution:C`import re
+
+REPORT = """Beacon to 203.0.113.66 at 03:12, retry via 198.51.100.7.
+Staging box 10.0.4.21 talked to 203.0.113.66 again. Implant version 2.4.1
+was recovered. Not addresses: 999.1.1 and 1.2.3."""
+
+
+def extract_ips(text):
+    pattern = r"\b(?:\d{1,3}\.){3}\d{1,3}\b"
+    return sorted(set(re.findall(pattern, text)))
+
+
+print(extract_ips(REPORT))`,
+      fb:[/import\s+re/, /def\s+extract_ips/, /re\.findall/, /set\(/, /sorted\(/], fbOut:"['10.0.4.21', '198.51.100.7', '203.0.113.66']",
+      line:'Indicators exported: {X}', secret:'3 IPs to the blocklist',
+      intel:{ note:'Regular expressions describe text patterns: \\d is a digit, {1,3} means one to three of them, \\. is a literal dot, and \\b is a word boundary. Use raw strings (r"...") so Python does not eat your backslashes. re.findall returns every match.',
+        syntax:C`import re
+re.findall(r"\d+", "a12b3")          # ['12', '3']
+re.search(r"user=(\w+)", line).group(1)
+re.sub(r"\s+", " ", messy)
+pattern = re.compile(r"ERROR \[(\w+)\]")`,
+        job:'IOC extraction is routine in threat intel and incident response: turning reports, emails and pastes into lists of IPs, domains and hashes. Real-world patterns also validate each octet (0-255) and handle "defanged" indicators like 203[.]0[.]113[.]66.',
+        drill:{q:'This pattern accepts 999.999.999.999. How would you fix that?', a:'Either validate after matching (all(0 <= int(o) <= 255 for o in ip.split("."))) or use the ipaddress module, where ipaddress.ip_address(s) raises ValueError on invalid input. Validating after a simple regex is usually easier to read than one huge pattern.'} } }
+    ]},
+
+  /* ---------- ZERO-DAY ---------- */
+  { case:'GHOST BADGE', intro:'Four operations burned in one year. Someone badges into the vault after hours on the night before each one. Build the tool that names them.',
+    missions:[
+    { id:'py-z1', title:'BOSS · The Ghost Badge', boss:true,
+      brief:'You have the raw badge reader dump and the four nights before each burned operation. There are three stages, each with hidden tests. The code you write in each stage is the foundation for the next.',
+      starter:C`SWIPES = [
+    "2025-05-12 08:02 LOBBY WREN",
+    "2025-05-13 22:04 VAULT OSPREY",
+    "2025-05-13 23:41 VAULT LYNX",
+    "2025-05-14 07:30 ARMORY KESTREL",
+    "2025-06-02 23:10 VAULT SHRIKE",
+    "2025-08-11 02:13 VAULT LYNX",
+    "2025-08-11 21:15 VAULT RAVEN",
+    "2025-08-11 16:05 ARMORY WREN",
+    "2025-11-08 09:15 VAULT OSPREY",
+    "2025-11-08 22:57 VAULT LYNX",
+    "2025-11-08 23:30 SERVER SPARROW",
+    "2026-01-12 20:45 VAULT RAVEN",
+    "2026-04-20 01:30 VAULT LYNX",
+    "2026-04-20 11:30 VAULT SPARROW",
+    "2026-04-20 21:05 VAULT OSPREY",
+]
+NIGHTS = ["2025-05-13", "2025-08-11", "2025-11-08", "2026-04-20"]
+
+
+# STAGE 1
+def parse_swipe(line):
+    """'2025-05-13 23:41 VAULT LYNX' ->
+    {"date": "2025-05-13", "hour": 23, "door": "VAULT", "agent": "LYNX"}"""
+    pass
+
+
+print(parse_swipe(SWIPES[2]))
+`,
+      stages:[
+        { task:'Stage 1 · parse_swipe(line) returns a dict with date, hour (as an int), door and agent.',
+          tests:[['Parses the LYNX swipe','parse_swipe("2025-05-13 23:41 VAULT LYNX") == {"date": "2025-05-13", "hour": 23, "door": "VAULT", "agent": "LYNX"}'],['hour is an int','type(parse_swipe(SWIPES[0])["hour"]) == int'],['hidden','parse_swipe("2026-04-20 01:30 VAULT LYNX")["hour"] == 1']],
+          hints:['Split the line into four parts. The hour is the time split on ":" and turned into an int.','date, time, door, agent = line.split()\nreturn {"date": date, "hour": int(time.split(":")[0]), "door": door, "agent": agent}'],
+          solution:C`def parse_swipe(line):
+    date, time, door, agent = line.split()
+    return {"date": date, "hour": int(time.split(":")[0]), "door": door, "agent": agent}`,
+          fb:[/def\s+parse_swipe/, /split\(/, /int\(/], fbOut:"{'date': '2025-05-13', 'hour': 23, 'door': 'VAULT', 'agent': 'LYNX'}",
+          full:C`SWIPES = [
+    "2025-05-12 08:02 LOBBY WREN",
+    "2025-05-13 22:04 VAULT OSPREY",
+    "2025-05-13 23:41 VAULT LYNX",
+    "2025-05-14 07:30 ARMORY KESTREL",
+    "2025-06-02 23:10 VAULT SHRIKE",
+    "2025-08-11 02:13 VAULT LYNX",
+    "2025-08-11 21:15 VAULT RAVEN",
+    "2025-08-11 16:05 ARMORY WREN",
+    "2025-11-08 09:15 VAULT OSPREY",
+    "2025-11-08 22:57 VAULT LYNX",
+    "2025-11-08 23:30 SERVER SPARROW",
+    "2026-01-12 20:45 VAULT RAVEN",
+    "2026-04-20 01:30 VAULT LYNX",
+    "2026-04-20 11:30 VAULT SPARROW",
+    "2026-04-20 21:05 VAULT OSPREY",
+]
+NIGHTS = ["2025-05-13", "2025-08-11", "2025-11-08", "2026-04-20"]
+
+
+def parse_swipe(line):
+    date, time, door, agent = line.split()
+    return {"date": date, "hour": int(time.split(":")[0]), "door": door, "agent": agent}
+
+
+print(parse_swipe(SWIPES[2]))`,
+          line:'Badge reader format: {X}', secret:'date · time · door · agent' },
+        { task:'Stage 2 · after_hours_vault(swipes) returns the parsed swipes at the VAULT where hour < 7 or hour >= 20.',
+          append:C`
+
+# STAGE 2
+def after_hours_vault(swipes):
+    """Return parsed swipes at the VAULT before 07:00 or from 20:00 on."""
+    pass
+
+
+print(len(after_hours_vault(SWIPES)))
+`,
+          tests:[['Finds 9 after-hours vault swipes','len(after_hours_vault(SWIPES)) == 9'],['Returns parsed dicts','after_hours_vault(SWIPES)[0]["agent"] == "OSPREY"'],['hidden','after_hours_vault(["2025-01-01 07:00 VAULT A", "2025-01-01 19:59 VAULT B", "2025-01-01 06:59 VAULT C"]) == [{"date": "2025-01-01", "hour": 6, "door": "VAULT", "agent": "C"}]']],
+          hints:['Reuse parse_swipe on each line, then keep the ones that match. A list comprehension works well here.','rows = [parse_swipe(s) for s in swipes]\nreturn [r for r in rows if r["door"] == "VAULT" and (r["hour"] < 7 or r["hour"] >= 20)]'],
+          solution:C`def after_hours_vault(swipes):
+    rows = [parse_swipe(s) for s in swipes]
+    return [r for r in rows if r["door"] == "VAULT" and (r["hour"] < 7 or r["hour"] >= 20)]`,
+          fb:[/def\s+after_hours_vault/, /parse_swipe\(/, /VAULT/, /<\s*7/, />=\s*20/], fbOut:'9',
+          full:C`SWIPES = [
+    "2025-05-12 08:02 LOBBY WREN",
+    "2025-05-13 22:04 VAULT OSPREY",
+    "2025-05-13 23:41 VAULT LYNX",
+    "2025-05-14 07:30 ARMORY KESTREL",
+    "2025-06-02 23:10 VAULT SHRIKE",
+    "2025-08-11 02:13 VAULT LYNX",
+    "2025-08-11 21:15 VAULT RAVEN",
+    "2025-08-11 16:05 ARMORY WREN",
+    "2025-11-08 09:15 VAULT OSPREY",
+    "2025-11-08 22:57 VAULT LYNX",
+    "2025-11-08 23:30 SERVER SPARROW",
+    "2026-01-12 20:45 VAULT RAVEN",
+    "2026-04-20 01:30 VAULT LYNX",
+    "2026-04-20 11:30 VAULT SPARROW",
+    "2026-04-20 21:05 VAULT OSPREY",
+]
+NIGHTS = ["2025-05-13", "2025-08-11", "2025-11-08", "2026-04-20"]
+
+
+def parse_swipe(line):
+    date, time, door, agent = line.split()
+    return {"date": date, "hour": int(time.split(":")[0]), "door": door, "agent": agent}
+
+
+def after_hours_vault(swipes):
+    rows = [parse_swipe(s) for s in swipes]
+    return [r for r in rows if r["door"] == "VAULT" and (r["hour"] < 7 or r["hour"] >= 20)]
+
+
+print(len(after_hours_vault(SWIPES)))`,
+          line:'After-hours vault entries: {X}', secret:'9 swipes, 4 agents' },
+        { task:'Stage 3 · find_mole(swipes, nights) returns the agent with an after-hours vault swipe on every night in nights (alphabetically first if several), or None.',
+          append:C`
+
+# STAGE 3
+def find_mole(swipes, nights):
+    """Return the agent who has an after-hours VAULT swipe on EVERY night
+    in nights. If several agents qualify, return the alphabetically first.
+    If nobody does, return None."""
+    pass
+
+
+print(find_mole(SWIPES, NIGHTS))
+`,
+          tests:[['Names the ghost badge','find_mole(SWIPES, NIGHTS) == "LYNX"'],['hidden','find_mole(SWIPES, ["2025-06-02"]) == "SHRIKE"'],['hidden','find_mole(SWIPES, ["2025-08-11", "2026-01-12"]) == "RAVEN"'],['hidden','find_mole(SWIPES, ["2025-05-14"]) is None']],
+          hints:['Build a dict of agent -> set of dates from after_hours_vault(). Keep the agents whose set contains every night: set(nights) <= dates.','by_agent = {}\nfor r in after_hours_vault(swipes):\n    by_agent.setdefault(r["agent"], set()).add(r["date"])\nhits = sorted(a for a, d in by_agent.items() if set(nights) <= d)\nreturn hits[0] if hits else None'],
+          solution:C`def find_mole(swipes, nights):
+    by_agent = {}
+    for r in after_hours_vault(swipes):
+        by_agent.setdefault(r["agent"], set()).add(r["date"])
+    hits = sorted(a for a, dates in by_agent.items() if set(nights) <= dates)
+    return hits[0] if hits else None`,
+          fb:[/def\s+find_mole/, /after_hours_vault\(/, /set\(/, /return/], fbOut:'LYNX',
+          full:C`SWIPES = [
+    "2025-05-12 08:02 LOBBY WREN",
+    "2025-05-13 22:04 VAULT OSPREY",
+    "2025-05-13 23:41 VAULT LYNX",
+    "2025-05-14 07:30 ARMORY KESTREL",
+    "2025-06-02 23:10 VAULT SHRIKE",
+    "2025-08-11 02:13 VAULT LYNX",
+    "2025-08-11 21:15 VAULT RAVEN",
+    "2025-08-11 16:05 ARMORY WREN",
+    "2025-11-08 09:15 VAULT OSPREY",
+    "2025-11-08 22:57 VAULT LYNX",
+    "2025-11-08 23:30 SERVER SPARROW",
+    "2026-01-12 20:45 VAULT RAVEN",
+    "2026-04-20 01:30 VAULT LYNX",
+    "2026-04-20 11:30 VAULT SPARROW",
+    "2026-04-20 21:05 VAULT OSPREY",
+]
+NIGHTS = ["2025-05-13", "2025-08-11", "2025-11-08", "2026-04-20"]
+
+
+def parse_swipe(line):
+    date, time, door, agent = line.split()
+    return {"date": date, "hour": int(time.split(":")[0]), "door": door, "agent": agent}
+
+
+def after_hours_vault(swipes):
+    rows = [parse_swipe(s) for s in swipes]
+    return [r for r in rows if r["door"] == "VAULT" and (r["hour"] < 7 or r["hour"] >= 20)]
+
+
+def find_mole(swipes, nights):
+    by_agent = {}
+    for r in after_hours_vault(swipes):
+        by_agent.setdefault(r["agent"], set()).add(r["date"])
+    hits = sorted(a for a, dates in by_agent.items() if set(nights) <= dates)
+    return hits[0] if hits else None
+
+
+print(find_mole(SWIPES, NIGHTS))`,
+          line:'Ghost badge holder: {X}', secret:'LYNX, contract courier' }
+      ],
+      intel:{ note:'Big problems are small functions stacked together. Each stage here is tested on its own, so when stage 3 fails you know stage 1 is not the cause. Sets are perfect for "has all of these" questions: a <= b means every item in a is also in b.',
+        syntax:C`a = {"x", "y"}
+b = {"x", "y", "z"}
+a <= b         # True  (subset)
+a & b, a | b   # intersection, union
+d.setdefault(key, set()).add(item)`,
+        job:'This is insider-threat analytics on a small scale: join physical access data with incident timelines. Security teams do the same thing with badge systems, VPN logs and EDR data. The habit to bring to a real job is building in small tested steps.',
+        drill:{q:'The badge data has 40 million rows. What changes?', a:'Stream the file instead of loading it, filter to VAULT and after-hours rows as early as possible, and only keep the dates you care about (the set of nights). At that scale the same logic usually moves into SQL or a SIEM query, with Python orchestrating it.'} } }
+    ]}
+  ]
+};
+
+/* ================= SQL TRACK ================= */
+TRACKS.sql = {
+  key:'sql', label:'SQL', op:'OPERATION LEDGER', file:'DF-SQL', ui:'db', ext:'sql', dbName:'archive.db',
+  tiers:[
+  /* ---------- NOOB ---------- */
+  { case:'THE ARCHIVE', intro:'You have been given one night of read access to the Bureau archive. Learn to ask it questions before the session closes.',
+    missions:[
+    { id:'sql-n1', title:'Open the Ledger',
+      brief:'Every database is a set of tables, and every table is rows and columns, like a spreadsheet. Check the explorer on the left to see what is here, then pull everything from the agents table.',
+      task:'Select every column and every row from agents.',
+      starter:`-- MISSION 1 · Open the ledger
+-- SELECT picks columns. FROM names the table. * means "every column".
+-- Press Run (Ctrl+Enter) to try it, then Submit.
+
+SELECT `,
+      solution:`SELECT * FROM agents;`,
+      hints:['You need three words and a star: SELECT, *, FROM, then the table name.','SELECT * FROM agents;'],
+      line:'Agents on payroll: {X}', secret:'12',
+      intel:{ note:'SELECT returns rows from a table. * means every column. SQL keywords are not case-sensitive, but writing them in CAPS is the convention. End statements with a semicolon.',
+        syntax:`SELECT * FROM agents;
+SELECT * FROM agents LIMIT 5;   -- first 5 rows only` } },
+
+    { id:'sql-n2', title:'Names Only',
+      brief:'Pulling every column is noisy. Real queries name the columns they need, which is faster and easier to read.',
+      task:'Select only the codename and status columns from agents.',
+      starter:`-- MISSION 2 · Names only
+-- List the columns you want, separated by commas.
+
+SELECT
+FROM agents;`,
+      solution:`SELECT codename, status FROM agents;`,
+      hints:['Put codename, status between SELECT and FROM.','SELECT codename, status FROM agents;'],
+      line:'Status codes in use: {X}', secret:'ACTIVE, RETIRED, MIA, SUSPENDED',
+      intel:{ note:'Column order in the SELECT list is the order you get back. AS gives a column a new name in the results without changing the table.',
+        syntax:`SELECT codename, status FROM agents;
+SELECT codename AS name, clearance AS lvl FROM agents;
+SELECT DISTINCT status FROM agents;  -- unique values` } },
+
+    { id:'sql-n3', title:'Active Duty',
+      brief:'Retired and missing agents are not your concern tonight. WHERE filters rows so only the matching ones come back.',
+      task:"Return every column for agents whose status is 'ACTIVE'.",
+      starter:`-- MISSION 3 · Active duty
+-- WHERE keeps only rows that match a condition.
+-- Text values go in 'single quotes'.
+
+SELECT * FROM agents
+WHERE `,
+      solution:`SELECT * FROM agents WHERE status = 'ACTIVE';`,
+      hints:["Compare the status column to the text 'ACTIVE' using =.","SELECT * FROM agents WHERE status = 'ACTIVE';"],
+      line:'Active field agents: {X}', secret:'9',
+      intel:{ note:"WHERE runs before rows are returned. Text goes in single quotes, numbers do not. In SQLite, text comparisons are case-sensitive with =, so 'active' will not match 'ACTIVE'.",
+        syntax:`WHERE status = 'ACTIVE'
+WHERE clearance >= 4
+WHERE status <> 'RETIRED'      -- not equal
+WHERE handler_id IS NULL       -- never "= NULL"` } },
+
+    { id:'sql-n4', title:'Old Guard',
+      brief:'Before you go any further, you need to know who has been here longest. ORDER BY sorts the results and LIMIT cuts them off.',
+      task:'Return codename and hired_on for the 3 earliest-hired agents, oldest first.',
+      starter:`-- MISSION 4 · Old guard
+-- ORDER BY column sorts A→Z / low→high. Add DESC to flip it.
+-- LIMIT n keeps the first n rows.
+
+SELECT codename, hired_on
+FROM agents
+`,
+      solution:`SELECT codename, hired_on FROM agents ORDER BY hired_on LIMIT 3;`, ordered:true,
+      hints:['Sort by hired_on (dates stored as YYYY-MM-DD sort correctly as text), then limit to 3.','SELECT codename, hired_on FROM agents ORDER BY hired_on LIMIT 3;'],
+      line:'Most senior officer: {X}', secret:'FALCON, hired 2008',
+      intel:{ note:'Without ORDER BY, a database is free to return rows in any order. ORDER BY is the only guarantee. You can sort by several columns, and dates in ISO format (YYYY-MM-DD) sort correctly even as text.',
+        syntax:`ORDER BY clearance DESC, codename ASC
+LIMIT 10 OFFSET 20   -- rows 21 to 30 (pagination)` } },
+
+    { id:'sql-n5', title:'Embassy Row',
+      brief:'Command suspects the embassy ops are linked. LIKE matches patterns in text: % stands for "anything".',
+      task:"Return codename and target for missions whose target mentions 'Embassy'.",
+      starter:`-- MISSION 5 · Embassy row
+-- LIKE '%word%' matches any text containing word.
+-- Table: missions
+
+`,
+      solution:`SELECT codename, target FROM missions WHERE target LIKE '%Embassy%';`,
+      hints:["Use the missions table and WHERE target LIKE '%Embassy%'.","SELECT codename, target FROM missions WHERE target LIKE '%Embassy%';"],
+      line:'Embassy-linked operations: {X}', secret:'5, two of them burned',
+      intel:{ note:'LIKE uses % for any run of characters and _ for exactly one character. In SQLite, LIKE ignores case for plain English letters. Combine conditions with AND and OR, and use parentheses to keep them clear.',
+        syntax:`WHERE target LIKE 'Embassy%'     -- starts with
+WHERE codename LIKE '_A%'        -- 2nd letter is A
+WHERE outcome IN ('FAILED', 'COMPROMISED')
+WHERE budget BETWEEN 20000 AND 50000` } }
+    ]},
+
+  /* ---------- SKID ---------- */
+  { case:'THE AUDIT', intro:'Somebody upstairs wants numbers, not rows. Summarize two years of operations and find out where things went wrong.',
+    missions:[
+    { id:'sql-s1', title:'Body Count',
+      brief:'Leadership wants a single number: how many operations failed outright. COUNT(*) collapses matching rows into one count.',
+      task:"Return the number of missions whose outcome is 'FAILED'.",
+      starter:`-- Aggregates: COUNT(*)  SUM(col)  AVG(col)  MIN(col)  MAX(col)
+
+`,
+      solution:`SELECT COUNT(*) FROM missions WHERE outcome = 'FAILED';`,
+      hints:["SELECT COUNT(*) FROM missions plus a WHERE filter.","SELECT COUNT(*) FROM missions WHERE outcome = 'FAILED';"],
+      line:'Failed operations: {X}', secret:'3',
+      intel:{ note:'Aggregate functions turn many rows into one value. COUNT(*) counts rows, COUNT(col) counts non-NULL values in col, and COUNT(DISTINCT col) counts unique values.',
+        syntax:`SELECT COUNT(*), AVG(budget), MAX(budget) FROM missions;
+SELECT COUNT(DISTINCT agent_id) FROM missions;`,
+        job:'"How many?" is the most common question a stakeholder asks. Get used to sanity-checking counts: if a number looks too round or too big, check your WHERE clause before you send it.' } },
+
+    { id:'sql-s2', title:'Scorecard',
+      brief:'Now break it down. GROUP BY splits rows into buckets and runs the aggregate once per bucket.',
+      task:'Return each outcome and how many missions had it.',
+      starter:`-- GROUP BY col  → one result row per distinct value of col
+
+`,
+      solution:`SELECT outcome, COUNT(*) AS total FROM missions GROUP BY outcome;`,
+      hints:['Select outcome and COUNT(*), then GROUP BY outcome.','SELECT outcome, COUNT(*) AS total FROM missions GROUP BY outcome;'],
+      line:'Compromised operations: {X}', secret:'4 of 20',
+      intel:{ note:'Every column in the SELECT list must either be in GROUP BY or be inside an aggregate. SQLite is forgiving about this, but PostgreSQL and SQL Server will throw an error, so write it the strict way.',
+        syntax:`SELECT station_id, outcome, COUNT(*)
+FROM missions
+GROUP BY station_id, outcome
+ORDER BY COUNT(*) DESC;`,
+        job:'GROUP BY powers every dashboard tile and weekly report you will ever see: tickets by priority, alerts by rule, revenue by region.' } },
+
+    { id:'sql-s3', title:'Burned',
+      brief:'missions only stores agent_id, which is a number. To see who ran each burned op, JOIN it to agents, matching agents.id to missions.agent_id.',
+      task:"Return mission codename and agent codename for every 'COMPROMISED' mission.",
+      starter:`-- JOIN connects tables on a matching key:
+--   FROM missions m
+--   JOIN agents a ON a.id = m.agent_id
+-- Short aliases (m, a) keep it readable.
+
+`,
+      solution:`SELECT m.codename, a.codename FROM missions m JOIN agents a ON a.id = m.agent_id WHERE m.outcome = 'COMPROMISED';`,
+      hints:['Both tables have a codename column, so prefix each one: m.codename, a.codename.',"SELECT m.codename, a.codename\nFROM missions m\nJOIN agents a ON a.id = m.agent_id\nWHERE m.outcome = 'COMPROMISED';"],
+      line:'Agent tied to two burned ops: {X}', secret:'OSPREY (now MIA)',
+      intel:{ note:'An INNER JOIN keeps only rows that match on both sides. The ON clause says how they match, usually a foreign key (missions.agent_id) pointing at a primary key (agents.id). Prefix columns whenever both tables share a column name.',
+        syntax:`SELECT m.codename AS op, a.codename AS agent, s.city
+FROM missions m
+JOIN agents   a ON a.id = m.agent_id
+JOIN stations s ON s.id = m.station_id;`,
+        job:'Real databases are normalized, so the answer is never in one table. Expect to join three to six tables in a normal workday query.' } },
+
+    { id:'sql-s4', title:'Repeat Offenders',
+      brief:'WHERE filters rows before grouping. To filter groups after they are counted, you need HAVING.',
+      task:'Return agent codename and number of missions for agents who ran more than 2 missions.',
+      starter:`-- WHERE  filters rows   (before GROUP BY)
+-- HAVING filters groups (after GROUP BY)
+
+`,
+      solution:`SELECT a.codename, COUNT(*) AS ops FROM agents a JOIN missions m ON m.agent_id = a.id GROUP BY a.codename HAVING COUNT(*) > 2;`,
+      hints:['Join agents to missions, GROUP BY a.codename, then HAVING COUNT(*) > 2.','SELECT a.codename, COUNT(*) AS ops\nFROM agents a\nJOIN missions m ON m.agent_id = a.id\nGROUP BY a.codename\nHAVING COUNT(*) > 2;'],
+      line:'Busiest operatives: {X}', secret:'MAGPIE & WREN, 3 ops each',
+      intel:{ note:'Logical order of a query: FROM → JOIN → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT. That is why you cannot use an aggregate in WHERE, and why HAVING exists.',
+        syntax:`SELECT agent_id, SUM(budget) AS spend
+FROM missions
+WHERE outcome <> 'ABORTED'
+GROUP BY agent_id
+HAVING SUM(budget) > 100000;`,
+        job:'HAVING is how you find outliers: users with more than 5 failed logins, hosts with more than 100 alerts, customers with 3 or more refunds.' } },
+
+    { id:'sql-s5', title:'Follow the Money',
+      brief:'Finance wants total spend per station city, biggest spender first. It combines everything from this case: a join, a sum, a group and a sort.',
+      task:'Return city and total mission budget per city, highest total first.',
+      starter:`-- Tables: stations (id, city), missions (station_id, budget)
+
+`,
+      solution:`SELECT s.city, SUM(m.budget) AS spend FROM stations s JOIN missions m ON m.station_id = s.id GROUP BY s.city ORDER BY spend DESC;`, ordered:true,
+      hints:['JOIN stations to missions on station_id, SUM(m.budget), GROUP BY s.city, ORDER BY the sum DESC.','SELECT s.city, SUM(m.budget) AS spend\nFROM stations s\nJOIN missions m ON m.station_id = s.id\nGROUP BY s.city\nORDER BY spend DESC;'],
+      line:'Biggest spender: {X}', secret:'Cairo station, $295,000',
+      intel:{ note:'You can ORDER BY a column alias from the SELECT list because ORDER BY runs last. Money should be stored as integers (cents or whole units) or DECIMAL, never as floating point.',
+        syntax:`SELECT s.city, SUM(m.budget) AS spend,
+       ROUND(AVG(m.budget), 0) AS avg_op
+FROM stations s JOIN missions m ON m.station_id = s.id
+GROUP BY s.city
+ORDER BY spend DESC;`,
+        job:'This is a classic first-week analyst request. The follow-up question is always "can you break that down by month?", which is GROUP BY strftime(\'%Y-%m\', started_on).' } }
+    ]},
+
+  /* ---------- HIRABLE THREAT ---------- */
+  { case:'THE MOLE HUNT', intro:'Internal Affairs has opened a case. These come in as tickets. Read the acceptance criteria and write production-quality SQL.',
+    missions:[
+    { id:'sql-h1', title:'IA-301 · Ghosts on payroll',
+      brief:'Ticket: "Find every agent who has never been assigned a mission. Return codename only." An inner join drops them, so you need a different join.',
+      task:'Return the codename of every agent with zero missions.',
+      criteria:['Uses a LEFT JOIN or NOT EXISTS','Returns codename only'],
+      starter:`-- IA-301: agents with no missions\n\n`,
+      solution:`SELECT a.codename FROM agents a LEFT JOIN missions m ON m.agent_id = a.id WHERE m.id IS NULL;`,
+      hints:['LEFT JOIN keeps every agent and fills NULL where no mission matches. Then keep the rows where m.id IS NULL.','SELECT a.codename\nFROM agents a\nLEFT JOIN missions m ON m.agent_id = a.id\nWHERE m.id IS NULL;'],
+      line:'Agents with zero missions: {X}', secret:'FALCON, NIGHTJAR, STARLING',
+      intel:{ note:'A LEFT JOIN keeps every row from the left table even when nothing matches on the right, and fills the right side with NULL. "LEFT JOIN ... WHERE right.id IS NULL" is the anti-join pattern, and NOT EXISTS does the same job.',
+        syntax:`SELECT a.codename FROM agents a
+WHERE NOT EXISTS (
+  SELECT 1 FROM missions m WHERE m.agent_id = a.id
+);`,
+        job:'Anti-joins find orphaned and missing records: accounts with no owner, servers with no backup job, users who never finished MFA enrollment. Auditors ask for exactly these lists.',
+        drill:{q:'Why is NOT IN (SELECT agent_id FROM missions) risky?', a:'If the subquery returns even one NULL, NOT IN returns no rows at all, because comparing anything to NULL is unknown. NOT EXISTS and LEFT JOIN / IS NULL do not have that trap.'} } },
+
+    { id:'sql-h2', title:'IA-305 · Budget outliers',
+      brief:'Ticket: "List missions that cost more than the average mission. Codename and budget." You cannot hard-code the average, because it changes as data changes.',
+      task:'Return codename and budget for missions with a budget above the average budget.',
+      criteria:['Average computed with a subquery, not typed in','codename, budget'],
+      starter:`-- IA-305: missions above average budget\n\n`,
+      solution:`SELECT codename, budget FROM missions WHERE budget > (SELECT AVG(budget) FROM missions);`,
+      hints:['Put (SELECT AVG(budget) FROM missions) on the right side of the comparison.','SELECT codename, budget\nFROM missions\nWHERE budget > (SELECT AVG(budget) FROM missions);'],
+      line:'Ops above average budget: {X}', secret:'8 of 20',
+      intel:{ note:'A scalar subquery returns a single value and can go anywhere a value can. A correlated subquery refers to the outer row and runs once per row, for example to compare each mission with its own station\'s average.',
+        syntax:`-- correlated: above the station's own average
+SELECT codename, budget FROM missions m
+WHERE budget > (SELECT AVG(budget) FROM missions x
+                WHERE x.station_id = m.station_id);`,
+        job:'Anomaly detection in SQL is usually "value compared with a baseline". Swap the average for a percentile or a rolling window and you have a basic fraud or UEBA rule.',
+        drill:{q:'Rewrite this without a subquery.', a:'Use a window function: SELECT codename, budget FROM (SELECT codename, budget, AVG(budget) OVER () AS avg_b FROM missions) WHERE budget > avg_b. The window keeps every row and adds the average next to it.'} } },
+
+    { id:'sql-h3', title:'IA-309 · Chain of command',
+      brief:'Ticket: "Show every agent next to their handler\'s codename. FALCON has no handler and must still be listed." handler_id points back into the same agents table.',
+      task:'Return each agent codename and their handler codename (NULL if none), for all 12 agents.',
+      criteria:['Joins agents to itself','All 12 agents, including FALCON'],
+      starter:`-- IA-309: agent → handler
+-- Self-join: use the same table twice with different aliases.
+
+`,
+      solution:`SELECT a.codename, h.codename AS handler FROM agents a LEFT JOIN agents h ON h.id = a.handler_id;`,
+      hints:['FROM agents a LEFT JOIN agents h ON h.id = a.handler_id. Use LEFT so FALCON survives.','SELECT a.codename, h.codename AS handler\nFROM agents a\nLEFT JOIN agents h ON h.id = a.handler_id;'],
+      line:'OSPREY’s handler: {X}', secret:'MAGPIE',
+      intel:{ note:'A self-join treats one table as two copies through aliases. It is how you query hierarchies stored as parent_id: managers, org charts, folder trees. For unlimited depth, use a recursive CTE.',
+        syntax:`WITH RECURSIVE chain(id, codename, depth) AS (
+  SELECT id, codename, 0 FROM agents WHERE handler_id IS NULL
+  UNION ALL
+  SELECT a.id, a.codename, c.depth + 1
+  FROM agents a JOIN chain c ON a.handler_id = c.id
+)
+SELECT * FROM chain ORDER BY depth;`,
+        job:'Identity teams write queries like this to answer "who reports to whom" and "who can approve what". They catch privilege problems such as an account approving its own manager.',
+        drill:{q:'What did the INNER JOIN version get wrong?', a:'It returned 11 rows. FALCON has handler_id NULL, and NULL never equals anything, so an inner join drops him. LEFT JOIN keeps him with a NULL handler.'} } },
+
+    { id:'sql-h4', title:'IA-314 · Scrub Berlin',
+      brief:'Ticket: "Berlin station is burned. Mark every ACTIVE mission at station 1 as SCRUBBED. Touch nothing else." This one writes data. Run the matching SELECT first so you can see exactly which rows will change.',
+      task:"UPDATE missions so ACTIVE missions at station_id 1 get outcome 'SCRUBBED'. No other row may change.",
+      criteria:['Only station 1 ACTIVE rows change','Checked by re-reading the whole missions table'],
+      starter:`-- IA-314: scrub Berlin
+-- Safe habit: run the SELECT version of your WHERE first.
+SELECT id, codename, outcome FROM missions
+WHERE station_id = 1 AND outcome = 'ACTIVE';
+
+-- Then write the UPDATE:
+`,
+      solution:`UPDATE missions SET outcome = 'SCRUBBED' WHERE station_id = 1 AND outcome = 'ACTIVE';`,
+      verify:`SELECT id, outcome FROM missions ORDER BY id;`,
+      hints:["UPDATE missions SET outcome = 'SCRUBBED' WHERE ... (the same WHERE as the SELECT).","UPDATE missions\nSET outcome = 'SCRUBBED'\nWHERE station_id = 1 AND outcome = 'ACTIVE';"],
+      line:'Berlin live ops: {X}', secret:'SEVEN BRIDGES scrubbed',
+      intel:{ note:'UPDATE and DELETE without WHERE hit every row in the table. Write the SELECT first, check the row count, then change SELECT ... to UPDATE ... SET. On a real system, wrap risky changes in BEGIN; ... COMMIT; so you can ROLLBACK.',
+        syntax:`BEGIN;
+UPDATE missions SET outcome = 'SCRUBBED' WHERE id = 120;
+-- check it...
+COMMIT;      -- or ROLLBACK;
+
+INSERT INTO stations (id, city, country) VALUES (7, 'Oslo', 'NO');
+DELETE FROM access_logs WHERE ts < '2025-01-01';`,
+        job:'Running a data fix in production is a rite of passage. Teams expect a written query, a row-count check, a transaction and a peer review. People get walked out for UPDATE statements without a WHERE clause.',
+        drill:{q:'Your UPDATE reports 400 rows changed but you expected 4. What now?', a:'If you are inside a transaction, ROLLBACK right away. If it already committed, stop, tell your lead, and restore from backup or point-in-time recovery. Then fix the process: transactions, peer review, a SELECT dry run.'} } },
+
+    { id:'sql-h5', title:'IA-320 · Priciest op per station',
+      brief:'Ticket: "For each station, show the single most expensive mission: city, mission codename, budget." GROUP BY cannot tell you which row had the max, but a window function can.',
+      task:'Return city, codename and budget of the highest-budget mission at each station.',
+      criteria:['One row per station','Uses ROW_NUMBER() OVER (PARTITION BY ...)'],
+      starter:`-- IA-320: top mission per station
+-- ROW_NUMBER() OVER (PARTITION BY x ORDER BY y DESC) numbers rows 1,2,3… inside each x.
+-- Wrap it in a CTE:  WITH ranked AS (...) SELECT ... FROM ranked WHERE rn = 1;
+
+`,
+      solution:`WITH ranked AS (SELECT s.city, m.codename, m.budget, ROW_NUMBER() OVER (PARTITION BY m.station_id ORDER BY m.budget DESC) AS rn FROM missions m JOIN stations s ON s.id = m.station_id) SELECT city, codename, budget FROM ranked WHERE rn = 1;`,
+      hints:['Inside the CTE, join missions to stations and add ROW_NUMBER() OVER (PARTITION BY m.station_id ORDER BY m.budget DESC) AS rn.','WITH ranked AS (\n  SELECT s.city, m.codename, m.budget,\n         ROW_NUMBER() OVER (PARTITION BY m.station_id ORDER BY m.budget DESC) AS rn\n  FROM missions m JOIN stations s ON s.id = m.station_id\n)\nSELECT city, codename, budget FROM ranked WHERE rn = 1;'],
+      line:'Cairo’s priciest op: {X}', secret:'IRON LANTERN, $90,000, burned',
+      intel:{ note:'Window functions compute across related rows without collapsing them. PARTITION BY sets the groups and ORDER BY sets the order inside each one. ROW_NUMBER, RANK, LAG, LEAD and running SUM() OVER are standard tools.',
+        syntax:`SELECT codename, budget,
+  RANK()      OVER (ORDER BY budget DESC)            AS overall_rank,
+  SUM(budget) OVER (PARTITION BY station_id)         AS station_total,
+  LAG(started_on) OVER (PARTITION BY agent_id ORDER BY started_on) AS prev_op
+FROM missions;`,
+        job:'"Latest record per user" and "top N per group" come up in nearly every data job and nearly every SQL interview. ROW_NUMBER in a CTE is the standard answer.',
+        drill:{q:'ROW_NUMBER, RANK or DENSE_RANK: which one, and when?', a:'ROW_NUMBER always gives 1, 2, 3 even on ties, so you get exactly one row per group. RANK gives ties the same number and skips ahead (1, 1, 3). DENSE_RANK gives ties the same number without gaps (1, 1, 2). Use RANK or DENSE_RANK when tied rows should all count.'} } }
+    ]},
+
+  /* ---------- ZERO-DAY ---------- */
+  { case:'NIGHT VAULT', intro:'Four operations were burned in a year. The vault door logs every badge, and someone inside walked in the night before each one.',
+    missions:[
+    { id:'sql-z1', title:'BOSS · The Night Vault', boss:true,
+      brief:'Final investigation, three stages. Each query builds on the last. The access_logs table records badge swipes: door, timestamp (ts) and whether access was granted. "After hours" means before 07:00 or from 20:00 on.',
+      starter:`-- NIGHT VAULT · tables: missions, access_logs, agents
+-- Date/time helpers in SQLite:
+--   date(ts)                    → '2025-05-13'
+--   strftime('%H', ts)          → '23'
+--   date('2025-05-14','-1 day') → '2025-05-13'
+
+`,
+      stages:[
+        { task:'Stage 1 · List codename and started_on for every COMPROMISED mission, oldest first.',
+          solution:`SELECT codename, started_on FROM missions WHERE outcome = 'COMPROMISED' ORDER BY started_on;`, ordered:true,
+          hints:["Filter missions by outcome and ORDER BY started_on.","SELECT codename, started_on FROM missions\nWHERE outcome = 'COMPROMISED'\nORDER BY started_on;"],
+          line:'Burn dates: {X}', secret:'4 ops, May 2025 to Apr 2026' },
+        { task:'Stage 2 · List agent codename and ts for every GRANTED vault entry after hours, ordered by ts.',
+          solution:`SELECT a.codename, l.ts FROM access_logs l JOIN agents a ON a.id = l.agent_id WHERE l.door = 'VAULT' AND l.granted = 1 AND (strftime('%H', l.ts) < '07' OR strftime('%H', l.ts) >= '20') ORDER BY l.ts;`, ordered:true,
+          hints:["Join access_logs to agents. Filter door = 'VAULT', granted = 1, and the hour from strftime('%H', l.ts). Keep the OR in parentheses.","SELECT a.codename, l.ts\nFROM access_logs l JOIN agents a ON a.id = l.agent_id\nWHERE l.door = 'VAULT' AND l.granted = 1\n  AND (strftime('%H', l.ts) < '07' OR strftime('%H', l.ts) >= '20')\nORDER BY l.ts;"],
+          line:'After-hours vault entries: {X}', secret:'7 granted, 3 agents' },
+        { task:'Stage 3 · Return codename and hit count for agents with 2+ after-hours vault entries on the day before a compromised mission started.',
+          solution:`SELECT a.codename, COUNT(*) AS hits FROM access_logs l JOIN agents a ON a.id = l.agent_id JOIN missions m ON m.outcome = 'COMPROMISED' AND date(l.ts) = date(m.started_on, '-1 day') WHERE l.door = 'VAULT' AND l.granted = 1 AND (strftime('%H', l.ts) < '07' OR strftime('%H', l.ts) >= '20') GROUP BY a.codename HAVING COUNT(*) >= 2;`,
+          hints:["Take the stage 2 query and add a JOIN to missions ON m.outcome = 'COMPROMISED' AND date(l.ts) = date(m.started_on, '-1 day'). Then GROUP BY codename HAVING COUNT(*) >= 2.","SELECT a.codename, COUNT(*) AS hits\nFROM access_logs l\nJOIN agents a   ON a.id = l.agent_id\nJOIN missions m ON m.outcome = 'COMPROMISED'\n               AND date(l.ts) = date(m.started_on, '-1 day')\nWHERE l.door = 'VAULT' AND l.granted = 1\n  AND (strftime('%H', l.ts) < '07' OR strftime('%H', l.ts) >= '20')\nGROUP BY a.codename\nHAVING COUNT(*) >= 2;"],
+          line:'The insider: {X}', secret:'MAGPIE, OSPREY’s own handler' }
+      ],
+      intel:{ note:'Hard questions get answered by stacking queries you have already verified. Get stage 1 right, then stage 2, then combine them. A join condition can be any expression, including a date calculation, not only id = id.',
+        syntax:`-- same logic as CTEs, easier to debug step by step
+WITH burns AS (
+  SELECT date(started_on, '-1 day') AS night FROM missions
+  WHERE outcome = 'COMPROMISED'
+), late AS (
+  SELECT agent_id, date(ts) AS d FROM access_logs
+  WHERE door = 'VAULT' AND granted = 1
+    AND (strftime('%H', ts) < '07' OR strftime('%H', ts) >= '20')
+)
+SELECT a.codename, COUNT(*) FROM late
+JOIN burns ON burns.night = late.d
+JOIN agents a ON a.id = late.agent_id
+GROUP BY a.codename;`,
+        job:'This is how insider-threat and DFIR analysts correlate access logs with incident timelines. The same query shape works for VPN logins before a data leak, or admin sign-ins before a config change.',
+        drill:{q:'Timestamps are stored in local time and stations span six time zones. What breaks?', a:'"After hours" and "the day before" both depend on time zone, so a 23:30 entry in Osaka is not the same moment as 23:30 in Berlin. Store timestamps in UTC, keep each station\'s time zone, and convert before applying business-hours rules.'} } }
+    ]}
+  ]
+};
+
+/* seed + schema meta */
+TRACKS.sql.seed = "CREATE TABLE stations (id INTEGER PRIMARY KEY, city TEXT NOT NULL, country TEXT NOT NULL);\nCREATE TABLE agents (id INTEGER PRIMARY KEY, codename TEXT NOT NULL UNIQUE, status TEXT NOT NULL, clearance INTEGER NOT NULL, station_id INTEGER REFERENCES stations(id), handler_id INTEGER REFERENCES agents(id), hired_on TEXT NOT NULL);\nCREATE TABLE missions (id INTEGER PRIMARY KEY, codename TEXT NOT NULL, agent_id INTEGER REFERENCES agents(id), station_id INTEGER REFERENCES stations(id), target TEXT NOT NULL, outcome TEXT NOT NULL, budget INTEGER NOT NULL, started_on TEXT NOT NULL);\nCREATE TABLE access_logs (id INTEGER PRIMARY KEY, agent_id INTEGER REFERENCES agents(id), door TEXT NOT NULL, ts TEXT NOT NULL, granted INTEGER NOT NULL);\nINSERT INTO stations VALUES (1,'Berlin','DE'),(2,'Cairo','EG'),(3,'Lisbon','PT'),(4,'Osaka','JP'),(5,'Tallinn','EE'),(6,'Nashville','US');\nINSERT INTO agents VALUES\n(1,'WREN','ACTIVE',3,1,5,'2019-04-02'),(2,'FALCON','RETIRED',5,6,NULL,'2008-09-15'),(3,'MAGPIE','ACTIVE',4,2,2,'2016-01-11'),\n(4,'OSPREY','MIA',2,2,3,'2021-06-30'),(5,'HERON','ACTIVE',5,6,2,'2011-03-21'),(6,'KESTREL','ACTIVE',4,3,5,'2015-08-08'),\n(7,'SHRIKE','ACTIVE',3,4,6,'2020-02-14'),(8,'SWIFT','ACTIVE',2,5,6,'2023-10-01'),(9,'RAVEN','SUSPENDED',3,1,5,'2017-05-19'),\n(10,'STARLING','ACTIVE',1,3,7,'2025-01-06'),(11,'NIGHTJAR','ACTIVE',2,5,6,'2024-07-22'),(12,'SPARROW','ACTIVE',3,4,7,'2022-11-03');\nINSERT INTO missions VALUES\n(101,'GLASS FERN',1,1,'Embassy courier','SUCCESS',42000,'2025-02-03'),\n(102,'BLUE ORCHID',3,2,'Port authority server','SUCCESS',65000,'2025-03-10'),\n(103,'COLD HARBOR',6,3,'Shipping manifest','SUCCESS',38000,'2025-03-22'),\n(104,'IRON LANTERN',4,2,'Embassy archive','COMPROMISED',90000,'2025-05-14'),\n(105,'PALE RIVER',7,4,'Shipping executive','FAILED',51000,'2025-05-30'),\n(106,'SILENT BELL',5,6,'Defector extraction','SUCCESS',120000,'2025-06-18'),\n(107,'RED KITE',1,1,'Bank ledger','FAILED',27000,'2025-07-07'),\n(108,'GREY ATLAS',9,1,'Embassy cleaner','COMPROMISED',33000,'2025-08-12'),\n(109,'NORTH STAR',8,5,'Telecom tower','SUCCESS',46000,'2025-08-29'),\n(110,'VELVET KEY',3,2,'Customs database','SUCCESS',71000,'2025-09-15'),\n(111,'DRY TIDE',12,4,'Arms broker','ABORTED',18000,'2025-10-02'),\n(112,'WHITE OAK',6,3,'Embassy garden party','SUCCESS',24000,'2025-10-20'),\n(113,'BLACK REED',4,2,'Safe house audit','COMPROMISED',15000,'2025-11-09'),\n(114,'HOLLOW SUN',7,4,'Courier intercept','SUCCESS',39000,'2025-12-01'),\n(115,'COPPER WIRE',9,1,'Bank ledger II','FAILED',22000,'2026-01-13'),\n(116,'LONG NIGHT',5,6,'Cyber range breach','SUCCESS',88000,'2026-02-04'),\n(117,'SALT ROAD',3,2,'Smuggling route','SUCCESS',54000,'2026-03-03'),\n(118,'EMBER GATE',12,4,'Embassy generator','COMPROMISED',61000,'2026-04-21'),\n(119,'QUIET FOX',8,5,'Border crossing','ACTIVE',30000,'2026-09-28'),\n(120,'SEVEN BRIDGES',1,1,'Crypto exchange','ACTIVE',47000,'2026-10-05');\nINSERT INTO access_logs (agent_id,door,ts,granted) VALUES\n(1,'LOBBY','2025-05-12 08:02',1),(3,'LOBBY','2025-05-12 08:15',1),(3,'SERVER ROOM','2025-05-12 10:40',1),(4,'LOBBY','2025-05-13 09:01',1),\n(4,'VAULT','2025-05-13 22:04',0),(3,'VAULT','2025-05-13 23:41',1),(6,'ARMORY','2025-05-14 07:30',1),(7,'LOBBY','2025-06-02 08:45',1),\n(7,'VAULT','2025-06-02 23:10',1),(5,'VAULT','2025-06-17 14:20',1),(9,'LOBBY','2025-08-11 08:30',1),(9,'VAULT','2025-08-11 21:15',1),\n(3,'VAULT','2025-08-11 02:13',1),(1,'ARMORY','2025-08-11 16:05',1),(8,'SERVER ROOM','2025-08-28 11:11',1),(3,'LOBBY','2025-09-14 08:00',1),\n(3,'VAULT','2025-09-14 15:30',1),(6,'VAULT','2025-10-19 13:00',1),(4,'LOBBY','2025-11-08 08:50',1),(4,'VAULT','2025-11-08 09:15',1),\n(3,'VAULT','2025-11-08 22:57',1),(12,'SERVER ROOM','2025-11-08 23:30',1),(10,'VAULT','2025-11-08 23:59',0),(7,'ARMORY','2025-12-01 06:10',1),\n(9,'VAULT','2026-01-12 20:45',1),(5,'SERVER ROOM','2026-02-03 19:55',1),(3,'LOBBY','2026-03-02 07:58',1),(12,'LOBBY','2026-04-20 08:10',1),\n(12,'VAULT','2026-04-20 11:30',1),(3,'VAULT','2026-04-20 01:30',1),(11,'LOBBY','2026-04-20 09:00',1),(8,'LOBBY','2026-09-27 08:20',1),\n(1,'VAULT','2026-10-04 10:00',1),(11,'VAULT','2026-10-04 21:40',0),(2,'LOBBY','2026-10-04 12:00',0);\n";
+TRACKS.sql.schemaView = [{"name": "stations", "open": false, "cols": [{"n": "id", "t": "INT", "pk": true}, {"n": "city", "t": "TEXT"}, {"n": "country", "t": "TEXT"}]}, {"name": "agents", "open": true, "cols": [{"n": "id", "t": "INT", "pk": true}, {"n": "codename", "t": "TEXT"}, {"n": "status", "t": "TEXT"}, {"n": "clearance", "t": "INT"}, {"n": "station_id", "t": "INT", "fk": "stations"}, {"n": "handler_id", "t": "INT", "fk": "agents"}, {"n": "hired_on", "t": "TEXT"}]}, {"name": "missions", "open": true, "cols": [{"n": "id", "t": "INT", "pk": true}, {"n": "codename", "t": "TEXT"}, {"n": "agent_id", "t": "INT", "fk": "agents"}, {"n": "station_id", "t": "INT", "fk": "stations"}, {"n": "target", "t": "TEXT"}, {"n": "outcome", "t": "TEXT"}, {"n": "budget", "t": "INT"}, {"n": "started_on", "t": "TEXT"}]}, {"name": "access_logs", "open": false, "cols": [{"n": "id", "t": "INT", "pk": true}, {"n": "agent_id", "t": "INT", "fk": "agents"}, {"n": "door", "t": "TEXT"}, {"n": "ts", "t": "TEXT"}, {"n": "granted", "t": "INT"}]}];
+
+const LINUX_V1 = {
+    op:'OPERATION DEAD DROP', file:'DF-LNX-07', term:'deaddrop — bash',
+    intro:'A field agent left a sealed package on a compromised server. Navigate the filesystem, find the vault, and run the decryptor.',
+    boot:['Connecting to deaddrop.node via ssh...','Session established. You are logged in as agent.','Every correct command declassifies one line of the case file.'],
+    unknown: s => `bash: ${s.split(/\s+/)[0]}: command not found`,
+    wrong: 'Command ran, but the file stays sealed. That is not the move.',
+    levels:[
+      {title:'Recon', prompt:'agent@deaddrop:~$',
+       brief:'You have just landed in a field terminal. Before touching anything, see what is in your home directory.',
+       obj:'List the files in the current directory.',
+       check:s=>/^ls(\s+-[a-zA-Z]+)*(\s+(\.|~|\.\/))?$/.test(s),
+       out:'briefing.txt  notes.md  tools/',
+       hints:['The command is two letters, short for "list".','Type: ls'],
+       line:'Assigned handler: {X}', secret:'KESTREL',
+       lesson:'ls lists what is in a directory. ls -l adds sizes, owners and permissions.'},
+      {title:'Read the Brief', prompt:'agent@deaddrop:~$',
+       brief:'There is a briefing file waiting for you. Print its contents to the screen.',
+       obj:'Display the contents of briefing.txt.',
+       check:s=>/^(cat|less|more|head|tail)\s+(\.\/|~\/)?briefing\.txt$/.test(s),
+       out:'TO:   FIELD AGENT\nFROM: KESTREL\nThe package is in /classified.\nTrust nothing you cannot verify.',
+       hints:['The command that "concatenates" files to the screen is three letters.','Type: cat briefing.txt'],
+       line:'Drop location: {X}', secret:'/classified',
+       lesson:'cat prints a whole file. For long files, less lets you scroll and q quits.'},
+      {title:'Move In', prompt:'agent@deaddrop:~$', next:'agent@deaddrop:/classified$',
+       brief:'The brief named the drop location. Get yourself there.',
+       obj:'Change into the /classified directory.',
+       check:s=>/^cd\s+\/classified\/?$/.test(s),
+       out:'',
+       hints:['cd means "change directory". Use the full path from the brief, starting with /.','Type: cd /classified'],
+       line:'Secure site: {X}', secret:'SUBLEVEL 3',
+       lesson:'cd moves you around. cd .. goes up one level, cd ~ goes home, and pwd prints where you are.'},
+      {title:'Hidden Files', prompt:'agent@deaddrop:/classified$',
+       brief:'A plain ls here only shows two files, but the vault is supposed to be in this folder. On Linux, any file whose name starts with a dot is hidden.',
+       ctx:'$ ls\ndecrypt.sh  intercept.log',
+       obj:'List ALL files, including hidden ones.',
+       check:s=>/^ls\s+(-[a-zA-Z]*[aA][a-zA-Z]*\s*)+$/.test(s),
+       out:'.  ..  .vault  decrypt.sh  intercept.log',
+       hints:['ls takes a flag for "all". Flags start with a dash.','Type: ls -a'],
+       line:'Hidden container: {X}', secret:'.vault',
+       lesson:'ls -a shows dotfiles. ls -la shows them with full details. Config files like .bashrc hide this way too.'},
+      {title:'Intercept', prompt:'agent@deaddrop:/classified$',
+       brief:'intercept.log holds 40,000 lines of radio chatter. Somewhere in it is one line containing the word CODEWORD. Reading it by hand would take all night.',
+       obj:'Search intercept.log for lines containing CODEWORD.',
+       check:s=>/^grep\b/.test(s) && /codeword/i.test(s) && /intercept\.log\b/.test(s),
+       out:'[03:14:07] CH-9 >> CODEWORD: ORCHID-9',
+       hints:['grep searches text for a pattern. Pattern first, then the file.','Type: grep CODEWORD intercept.log'],
+       line:'Vault codeword: {X}', secret:'ORCHID-9',
+       lesson:'grep finds matching lines. -i ignores case, -n adds line numbers, -r searches a whole folder.'},
+      {title:'Permissions', prompt:'agent@deaddrop:/classified$',
+       brief:'decrypt.sh refuses to run. Its permissions read -rw-r--r--: read and write, but no x for execute.',
+       ctx:'$ ./decrypt.sh\nbash: ./decrypt.sh: Permission denied',
+       obj:'Make decrypt.sh executable.',
+       check:s=>/^chmod\s+([ugoa]*\+[rwx]*x[rwx]*|[0-7]?[1357][0-7]{2})\s+(\.\/)?decrypt\.sh$/.test(s),
+       out:"mode of 'decrypt.sh' changed from 0644 (rw-r--r--) to 0755 (rwxr-xr-x)",
+       hints:['chmod changes file permissions. You want to add (+) execute (x).','Type: chmod +x decrypt.sh'],
+       line:'Decryptor status: {X}', secret:'ARMED',
+       lesson:'chmod +x adds execute. In number form, 755 means owner rwx (7) and everyone else r-x (5).'},
+      {title:'Run It', prompt:'agent@deaddrop:/classified$',
+       brief:'The decryptor is armed and the codeword is loaded. Run the script that sits in this folder.',
+       obj:'Execute decrypt.sh from the current directory.',
+       check:s=>/^(\.\/decrypt\.sh|(ba)?sh\s+(\.\/)?decrypt\.sh)$/.test(s),
+       out:'Decrypting .vault with ORCHID-9...\n[################] 100%\nPAYLOAD: Meeting moved to Pier 14, 0600 Friday.',
+       hints:['To run a script in the current folder you prefix it with ./','Type: ./decrypt.sh'],
+       line:'Final payload: {X}', secret:'PIER 14 · 0600 FRIDAY',
+       lesson:'./ means "this folder". Linux will not run scripts from the current directory without it. That is a security feature.'}
+    ]
+  };
+TRACKS.linux = {
+  key:'linux', label:'Linux CLI', op:LINUX_V1.op, file:'DF-LNX', ui:'term', boot:LINUX_V1.boot,
+  unknown:LINUX_V1.unknown, wrong:LINUX_V1.wrong,
+  tiers:[{ case:'DEAD DROP', intro:LINUX_V1.intro,
+    missions:LINUX_V1.levels.map((l,i)=>({ id:'lx-'+(i+1), title:l.title, prompt:l.prompt, next:l.next,
+      brief:l.brief, task:l.obj, ctx:l.ctx, check:l.check, out:l.out, hints:l.hints,
+      solution:l.hints[1].replace(/^Type:\s*/,''), line:l.line, secret:l.secret, intel:{note:l.lesson} }))
+  }]
+};
+
+/* ============ EXECUTION ENGINES ============ */
+const ENG = { pyReady:false, sqlDb:null, sqlReady:false, pyBlocked:false };
+
+/* ---- Python via Skulpt ---- */
+function pyRun(code, limitMs){
+  let out = '';
+  return new Promise(resolve=>{
+    try{
+      Sk.configure({
+        output:t=>{ out += t; },
+        read:f=>{ if(Sk.builtinFiles===undefined||Sk.builtinFiles.files[f]===undefined) throw "File not found: '"+f+"'"; return Sk.builtinFiles.files[f]; },
+        __future__:Sk.python3, execLimit: limitMs||4000, killableWhile:true, killableFor:true
+      });
+      const p = Sk.misceval.asyncToPromise(()=>Sk.importMainWithBody('<stdin>', false, code, true));
+      p.then(()=>resolve({ok:true, out}), e=>resolve({ok:false, out, err:pyErr(e)}));
+    }catch(e){ resolve({ok:false, out, err:pyErr(e)}); }
+  });
+}
+function pyErr(e){
+  if(e && e.toString) {
+    let s = e.toString();
+    if(e.traceback && e.traceback.length && e.traceback[0].lineno) s += '  (line '+e.traceback[0].lineno+')';
+    return s;
+  }
+  return String(e);
+}
+/* Grade a python mission: run learner code, then run assertions that can see its namespace.
+   We append a probe that prints a JSON verdict line, re-running the student's module with checks. */
+async function pyGrade(code, mission){
+  // Build a harness: student code, then checks. __code holds raw source for source-based tests.
+  const tests = mission.tests || [];
+  const pre = mission.testPre ? mission.testPre + '\n' : '';
+  let harness = code + '\n' + pre + '\n__code = ' + JSON.stringify(stripComments(code)) + '\n';
+  harness += '__results = []\n';
+  tests.forEach((t,i)=>{
+    const expr = t[1].replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    harness += '__ok=False\ntry:\n    __ok = bool(' + t[1] + ')\nexcept Exception as __e:\n    __ok=False\n__results.append(__ok)\n';
+  });
+  harness += "print('\\n__VERDICT__' + ''.join('1' if x else '0' for x in __results))";
+  const res = await pyRun(harness, 5000);
+  // parse verdict
+  const m = res.out.match(/__VERDICT__([01]*)/);
+  const studentOut = res.out.replace(/\n?__VERDICT__[01]*\s*$/,'');
+  if(!res.ok && !m){ return {ok:false, out:studentOut, err:res.err, marks:tests.map(()=>false)}; }
+  const bits = m ? m[1] : '';
+  const marks = tests.map((_,i)=> bits[i]==='1');
+  let outOk = true, hasOut = false;
+  (mission.out||[]).forEach(o=>{ hasOut = true; if(!o[1].test(studentOut)) outOk = false; });
+  const testsOk = tests.length ? marks.every(Boolean) : true;
+  const ok = outOk && testsOk && (tests.length>0 || hasOut);
+  return {ok, out:studentOut, err:res.ok?null:res.err, marks};
+}
+function stripComments(src){
+  return src.split('\n').map(l=>{
+    // naive: drop a # that is not inside quotes
+    let inS=null, out='';
+    for(let i=0;i<l.length;i++){const c=l[i];
+      if(inS){ out+=c; if(c===inS && l[i-1]!=='\\') inS=null; }
+      else if(c==='#'){ break; }
+      else { if(c==='"'||c==="'") inS=c; out+=c; }
+    }
+    return out;
+  }).join('\n');
+}
+/* fallback grader when Python engine is blocked: regex "fingerprints" on source */
+function pyGradeFallback(code, mission){
+  const src = stripComments(code);
+  const fb = mission.fb || [];
+  const marks = (mission.tests||[]).map(()=>null);
+  const ok = fb.length>0 && fb.every(re=>re.test(src));
+  return {ok, out: ok ? (mission.fbOut||'') : '', fallback:true, marks};
+}
+
+/* ---- SQL via sql.js ---- */
+let SQLjs=null;
+async function sqlInit(seed){
+  if(!SQLjs){ SQLjs = await initSqlJs(); }
+  ENG.sqlDb = new SQLjs.Database();
+  ENG.sqlDb.run(seed);
+  ENG.sqlReady = true;
+}
+function sqlResetDb(seed){ try{ENG.sqlDb && ENG.sqlDb.close();}catch(e){} ENG.sqlDb = new SQLjs.Database(); ENG.sqlDb.run(seed); }
+function sqlExec(query){
+  try{
+    const stmts = ENG.sqlDb.exec(query);
+    // last SELECT result (for display); also capture if write happened
+    const last = stmts.length ? stmts[stmts.length-1] : null;
+    return {ok:true, result:last, all:stmts};
+  }catch(e){ return {ok:false, err:e.message||String(e)}; }
+}
+/* compare two result sets; ordered=true keeps order, else sort rows */
+function sameResult(a, b, ordered){
+  if(!a||!b) return false;
+  if(a.columns.length !== b.columns.length) return false;
+  const norm = r => (ordered ? r.slice() : r.slice().sort(cmpRow));
+  const A = norm(a.values), B = norm(b.values);
+  if(A.length !== B.length) return false;
+  for(let i=0;i<A.length;i++){
+    if(A[i].length!==B[i].length) return false;
+    for(let j=0;j<A[i].length;j++){ if(String(A[i][j])!==String(B[i][j])) return false; }
+  }
+  return true;
+}
+function cmpRow(a,b){ const s=JSON.stringify(a), t=JSON.stringify(b); return s<t?-1:s>t?1:0; }
+
+/* ============ GAME CONTROLLER ============ */
+const RANKS = [
+  {name:'NOOB', xp:0},{name:'SCRIPT KIDDIE', xp:120},{name:'OPERATOR', xp:320},
+  {name:'HIRABLE THREAT', xp:620},{name:'GHOST', xp:1000},{name:'ZERO-DAY', xp:1500}
+];
+const TIER_NAMES = ['NOOB','SKID','HIRABLE THREAT','ZERO-DAY'];
+const XP_BY_TIER = [20, 35, 60, 110];
+const BADGES = [
+  {id:'first-blood', icon:'🩸', name:'First Blood', desc:'Declassify your first file.'},
+  {id:'polyglot', icon:'🗝️', name:'Polyglot', desc:'Solve a mission in all three languages.'},
+  {id:'no-hints', icon:'🎯', name:'Clean Op', desc:'Clear a whole tier without a single hint.'},
+  {id:'skid', icon:'📟', name:'Script Kiddie', desc:'Finish a Skid tier.'},
+  {id:'hirable', icon:'💼', name:'Hirable', desc:'Clear a Hirable Threat tier.'},
+  {id:'boss', icon:'☠️', name:'Mole Hunter', desc:'Beat a Zero-Day boss.'},
+  {id:'closer', icon:'🏆', name:'The Closer', desc:'Fully declassify every case file.'},
+  {id:'streak5', icon:'🔥', name:'On a Roll', desc:'Hit a 5-solve streak.'}
+];
+const KEY = 'op-redacted-v2';
+
+let S = { track:'python', xp:0, streak:0, solved:{}, hintsUsed:{}, badges:[], cleanTiers:{} };
+(function load(){ try{ const d=JSON.parse(localStorage.getItem(KEY)||'null'); if(d) S=Object.assign(S,d); }catch(e){} })();
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+
+/* ---- flat mission index per track ---- */
+function flat(track){ const o=[]; TRACKS[track].tiers.forEach((ti,tn)=>ti.missions.forEach((m,mi)=>o.push({m,tn,mi,gi:o.length}))); return o; }
+function missionById(track,id){ return flat(track).find(x=>x.m.id===id); }
+function isSolved(id){ return !!S.solved[id]; }
+function trackDone(track){ return flat(track).every(x=>isSolved(x.m.id)); }
+function tierSolvedCount(track,tn){ return TRACKS[track].tiers[tn].missions.filter(m=>isSolved(m.id)).length; }
+function tierUnlocked(track,tn){ if(tn===0) return true; const prev=TRACKS[track].tiers[tn-1]; return prev.missions.every(m=>isSolved(m.id)); }
+
+/* current mission pointer per track */
+let cur = {};
+function curGi(track){ if(cur[track]!=null) return cur[track]; const f=flat(track); const first=f.find(x=>!isSolved(x.m.id)); return first?first.gi:f.length-1; }
+
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+let cm=null, termHist=[], termIdx=0, bossStage={};
+
+/* ---- rank / xp ---- */
+function rankFor(xp){ let r=RANKS[0]; for(const x of RANKS) if(xp>=x.xp) r=x; return r; }
+function nextRank(xp){ for(const x of RANKS) if(xp<x.xp) return x; return null; }
+function addXP(n){ const before=rankFor(S.xp).name; S.xp+=n; const after=rankFor(S.xp).name; if(after!==before) toast('rankup','<span class="big">RANK UP</span><br>You are now <b>'+after+'</b>'); }
+
+/* ---- badges ---- */
+function grant(id){ if(S.badges.includes(id)) return; S.badges.push(id); const b=BADGES.find(x=>x.id===id); toast('badge','<span class="bt">✦ COMMENDATION ✦</span>'+b.icon+' '+b.name+'<br><span style="color:var(--muted);font-size:11px">'+b.desc+'</span>'); }
+function checkBadges(ctx){
+  const total = Object.keys(S.solved).length;
+  if(total>=1) grant('first-blood');
+  if(S.streak>=5) grant('streak5');
+  // polyglot: at least one solve in each track
+  if(['python','sql','linux'].every(t=>flat(t).some(x=>isSolved(x.m.id)))) grant('polyglot');
+  if(ctx){
+    const {track,tn} = ctx;
+    const tier=TRACKS[track].tiers[tn];
+    const full = tier.missions.every(m=>isSolved(m.id));
+    if(full){
+      if(TIER_NAMES[tn]==='SKID') grant('skid');
+      if(TIER_NAMES[tn]==='HIRABLE THREAT') grant('hirable');
+      if(TIER_NAMES[tn]==='ZERO-DAY') grant('boss');
+      if(S.cleanTiers[track+'-'+tn]) grant('no-hints');
+    }
+  }
+  if(['python','sql','linux'].every(trackDone)) grant('closer');
+}
+
+/* ---- toasts ---- */
+function toast(cls, html){ const t=document.createElement('div'); t.className='toast '+cls; t.innerHTML=html; $('#toasts').appendChild(t); setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .4s';setTimeout(()=>t.remove(),400);}, cls==='badge'||cls==='rankup'?4200:2600); }
+
+/* ============ RENDER ============ */
+function renderHUD(){
+  const total = flat(S.track).length + 0;
+  const allTotal = ['python','sql','linux'].reduce((a,t)=>a+flat(t).length,0);
+  const allSolved = Object.keys(S.solved).length;
+  $('#hud-solved').textContent=allSolved; $('#hud-total').textContent=allTotal;
+  $('#hud-streak').textContent=S.streak;
+  $('#hud-bcount').textContent=S.badges.length;
+  const r=rankFor(S.xp), nx=nextRank(S.xp);
+  $('#hud-rank').textContent=r.name;
+  $('#hud-xpn').textContent=S.xp;
+  const pct = nx ? Math.round((S.xp-r.xp)/(nx.xp-r.xp)*100) : 100;
+  $('#hud-xp').style.width=pct+'%';
+  $$('.track').forEach(b=>{
+    b.setAttribute('aria-pressed', b.dataset.t===S.track);
+    const sp=b.querySelector('.tbadge'); const t=b.dataset.t;
+    const sc=flat(t).filter(x=>isSolved(x.m.id)).length, tot=flat(t).length;
+    sp.textContent = sc===tot ? '✓ COMPLETE' : sc>0 ? sc+'/'+tot+' done' : '';
+  });
+}
+
+function renderLadder(){
+  const T=TRACKS[S.track], L=$('#ladder'); L.innerHTML='';
+  $('#rail-op').textContent=T.op; $('#rail-file').textContent=T.file;
+  const curG=curGi(S.track), f=flat(S.track);
+  T.tiers.forEach((ti,tn)=>{
+    const unlocked=tierUnlocked(S.track,tn);
+    const div=document.createElement('div'); div.className='tier'+(unlocked?'':' locked'); div.dataset.tn=tn;
+    const sc=tierSolvedCount(S.track,tn);
+    div.innerHTML='<div class="tier-h"><span class="tg">'+TIER_NAMES[tn]+'</span><span style="color:var(--muted)">'+ti.case+'</span><span style="margin-left:auto;color:var(--dim);font-size:10px">'+sc+'/'+ti.missions.length+'</span></div>';
+    const ul=document.createElement('ul'); ul.className='mlist';
+    ti.missions.forEach((m,mi)=>{
+      const gi=f.find(x=>x.m.id===m.id).gi;
+      const done=isSolved(m.id); const isCur=gi===curG;
+      const li=document.createElement('li'); li.className='mrow'+(done?' done':'')+(isCur?' cur':'')+(unlocked?'':' locked');
+      li.dataset.gi=gi;
+      li.innerHTML='<span class="dot">'+(done?'✓':'')+'</span><span class="mt">'+m.title+'</span>'+(m.boss?'<span class="boss">BOSS</span>':'');
+      ul.appendChild(li);
+    });
+    div.appendChild(ul); L.appendChild(div);
+  });
+}
+
+function renderDossier(revealId){
+  const T=TRACKS[S.track], d=$('#dossier');
+  const done=trackDone(S.track);
+  let html='<div class="dh"><span>File '+T.file+'</span><span>Eyes only</span></div>';
+  html+='<div class="dstamp'+(done?' dec':'')+'">'+(done?'DECLASSIFIED':'TOP SECRET')+'</div>';
+  html+='<div class="dtitle">'+T.op+'</div><div class="dsub">'+(TRACKS[S.track].tiers[curTier()].case)+'</div><ol class="dlines">';
+  // show lines for current tier's missions (those with a 'line')
+  const tier=TRACKS[S.track].tiers[curTier()];
+  tier.missions.forEach((m,i)=>{
+    if(!m.line){ return; }
+    const [pre,post]=m.line.split('{X}');
+    let val;
+    if(isSolved(m.id)){ val='<span class="secret" data-mid="'+m.id+'">'+esc(m.secret)+'</span>'; }
+    else { val='<span class="bar" aria-label="redacted">'+'x'.repeat(Math.max(4,Math.round(m.secret.length*0.7)))+'</span>'; }
+    html+='<li><span class="dn">§'+(i+1)+'</span><span>'+esc(pre)+val+esc(post||'')+'</span></li>';
+  });
+  html+='</ol>';
+  d.innerHTML=html;
+  if(revealId){ const el=d.querySelector('[data-mid="'+revealId+'"]'); if(el){ const m=missionById(S.track,revealId).m; scramble(el, m.secret); } }
+}
+function curTier(){ return flat(S.track)[curGi(S.track)].tn; }
+
+function scramble(el, final){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){ el.textContent=final; return; }
+  const chars='█▓▒░#%&@$*/\\'; let fr=0, total=16;
+  (function tick(){ fr++; el.textContent=final.split('').map((c,i)=>c===' '?' ':(i<final.length*fr/total?c:chars[Math.random()*chars.length|0])).join(''); if(fr<total) setTimeout(tick,38); else el.textContent=final; })();
+}
+function esc(s){ return (s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+
+/* ============ MISSION PANEL ============ */
+function renderMission(){
+  const x=flat(S.track)[curGi(S.track)], m=x.m, mp=$('#mission');
+  const stageInfo = m.stages ? bossStageInfo(m) : null;
+  const lvl = TIER_NAMES[x.tn]+' · '+TRACKS[S.track].tiers[x.tn].case + (m.stages ? ' · STAGE '+(bossStage[m.id]||0 + 1) : '');
+  let html='<div class="mhead"><div><div class="mlvl">'+lvl+'</div><h2>'+esc(m.title)+'</h2></div></div><div class="mbody">';
+  html+='<p class="brieftext">'+esc(m.brief)+'</p>';
+  const task = stageInfo ? stageInfo.task : m.task;
+  if(task) html+='<div class="task">'+esc(task)+'</div>';
+  if(m.criteria){ html+='<div class="ctxlabel">Acceptance criteria</div><ul class="crit">'+m.criteria.map(c=>'<li>'+esc(c)+'</li>').join('')+'</ul>'; }
+  if(m.ctx){ html+='<div class="ctxlabel">On screen</div><pre class="ctx">'+esc(m.ctx)+'</pre>'; }
+  html+='</div>';
+  mp.innerHTML=html;
+}
+function bossStageInfo(m){ const si=bossStage[m.id]||0; return m.stages[si]; }
+
+/* ============ WORKSPACE (per UI type) ============ */
+function renderWorkspace(){
+  const T=TRACKS[S.track], x=flat(S.track)[curGi(S.track)], m=x.m;
+  if(T.ui==='term') return renderTerminal(m);
+  if(T.ui==='db') return renderDbClient(m);
+  return renderIde(m);
+}
+
+/* ---- Python IDE ---- */
+function starterFor(m){
+  if(m.stages){ const si=bossStage[m.id]||0; let s=m.starter; for(let k=1;k<=si;k++){ if(m.stages[k].append) s+=m.stages[k].append; } return s; }
+  return m.starter||'';
+}
+function renderIde(m){
+  const ws=$('#ws');
+  ws.innerHTML='<div class="wsbar"><span class="fn">serpent.py</span><span class="dots"><i class="r"></i><i class="y"></i><i class="g"></i></span></div>'
+    +'<div class="editor"><textarea id="code"></textarea></div>'
+    +'<div class="tests" id="tests"></div>'
+    +'<div class="console" id="out"><span class="muted">Press Run to execute. Submit checks the mission\'s tests.</span></div>'
+    +'<div class="actions">'
+      +'<button class="btn run" id="run">▶ Run <kbd>Ctrl⏎</kbd></button>'
+      +'<button class="btn submit" id="submit">⚑ Submit</button>'
+      +'<button class="btn" id="reseed">↺ Reset code</button>'
+      +'<button class="btn ghost" id="revealsol" style="margin-left:auto">Show solution</button>'
+    +'</div>';
+  cm = CodeMirror.fromTextArea($('#code'), {mode:'python', lineNumbers:true, indentUnit:4, matchBrackets:true, autoCloseBrackets:true, viewportMargin:Infinity});
+  cm.setValue(savedCode(m.id) || starterFor(m));
+  cm.on('change',()=>{ try{localStorage.setItem(KEY+':code:'+m.id, cm.getValue());}catch(e){} });
+  renderTestList(m);
+  $('#run').onclick=()=>pyDoRun(m);
+  $('#submit').onclick=()=>pyDoSubmit(m);
+  $('#reseed').onclick=()=>{ cm.setValue(starterFor(m)); };
+  $('#revealsol').onclick=()=>showSolution(m);
+  cm.setOption('extraKeys',{'Ctrl-Enter':()=>pyDoRun(m),'Cmd-Enter':()=>pyDoRun(m)});
+}
+function renderTestList(m){
+  const el=$('#tests'); if(!el) return;
+  const stageInfo = m.stages ? bossStageInfo(m) : null;
+  const tests = (stageInfo?stageInfo.tests:m.tests)||[];
+  if(!tests.length){ el.classList.remove('show'); return; }
+  el.classList.add('show');
+  el.innerHTML='<div class="th">Acceptance tests</div>'+tests.map((t,i)=>
+    '<div class="tc wait" data-i="'+i+'"><span class="mk"></span><span>'+esc(t[0]==='hidden'?'Hidden test '+(i+1):t[0])+(t[0]==='hidden'?'<span class="hidden-tag">HIDDEN</span>':'')+'</span></div>').join('');
+}
+function savedCode(id){ try{return localStorage.getItem(KEY+':code:'+id);}catch(e){return null;} }
+
+async function pyDoRun(m){
+  const out=$('#out'); out.innerHTML='<span class="muted">Running…</span>';
+  if(ENG.pyBlocked){ out.innerHTML='<span class="muted">Live Python is unavailable in this view; use Submit to check your source.</span>'; return; }
+  const res=await pyRun(cm.getValue(), 4000);
+  out.innerHTML='';
+  if(res.out) out.appendChild(line(res.out,''));
+  if(res.err) out.appendChild(line(res.err,'err'));
+  if(!res.out && !res.err) out.appendChild(line('(no output)','muted'));
+}
+async function pyDoSubmit(m){
+  const out=$('#out'); out.innerHTML='<span class="muted">Checking…</span>';
+  const stageInfo = m.stages?bossStageInfo(m):null;
+  const effM = stageInfo ? Object.assign({}, m, {tests:stageInfo.tests, fb:stageInfo.fb, fbOut:stageInfo.fbOut}) : m;
+  let res;
+  if(ENG.pyBlocked){ res=pyGradeFallback(cm.getValue(), effM); }
+  else { res=await pyGrade(cm.getValue(), effM); }
+  out.innerHTML='';
+  if(res.out) out.appendChild(line(res.out,''));
+  if(res.err) out.appendChild(line(res.err,'err'));
+  // mark tests
+  const tests=(effM.tests)||[];
+  $$('#tests .tc').forEach((tc,i)=>{ tc.className='tc '+(res.marks&&res.marks[i]===true?'pass':res.marks&&res.marks[i]===false?'fail':'wait'); });
+  if(res.ok){ onSolve(m, out); }
+  else {
+    out.appendChild(line('ACCESS DENIED — tests not passing yet.','err'));
+    bumpFail(m, out);
+  }
+}
+
+/* ---- SQL DB client ---- */
+function renderDbClient(m){
+  const ws=$('#ws'), T=TRACKS[S.track];
+  ws.innerHTML='<div class="wsbar"><span class="fn">'+T.dbName+'</span><span>SQLite · read access</span></div>'
+    +'<div class="dbwrap"><div class="schema" id="schema"></div>'
+    +'<div class="dbmain"><div class="editor"><textarea id="code"></textarea></div>'
+    +'<div class="grid-wrap" id="grid"><div class="gridmsg">Run a query to see results (Ctrl+Enter).</div></div>'
+    +'<div class="history" id="hist"></div></div></div>'
+    +'<div class="tests" id="tests"></div>'
+    +'<div class="actions">'
+      +'<button class="btn run" id="run">▶ Run <kbd>Ctrl⏎</kbd></button>'
+      +'<button class="btn submit" id="submit">⚑ Submit</button>'
+      +'<button class="btn" id="histbtn">⟲ History</button>'
+      +'<button class="btn" id="reseed">↺ Reset DB</button>'
+      +'<button class="btn ghost" id="revealsol" style="margin-left:auto">Show solution</button>'
+    +'</div>';
+  renderSchema();
+  cm = CodeMirror.fromTextArea($('#code'), {mode:'text/x-sql', lineNumbers:true, matchBrackets:true, viewportMargin:Infinity});
+  cm.setValue(savedCode(m.id) || starterFor(m));
+  cm.on('change',()=>{ try{localStorage.setItem(KEY+':code:'+m.id, cm.getValue());}catch(e){} });
+  cm.setOption('extraKeys',{'Ctrl-Enter':()=>sqlDoRun(m),'Cmd-Enter':()=>sqlDoRun(m)});
+  renderTestList(m);
+  $('#run').onclick=()=>sqlDoRun(m);
+  $('#submit').onclick=()=>sqlDoSubmit(m);
+  $('#reseed').onclick=()=>{ sqlResetDb(T.seed); gridMsg('Database reset to original snapshot.','ok'); };
+  $('#histbtn').onclick=()=>$('#hist').classList.toggle('open');
+  $('#revealsol').onclick=()=>showSolution(m);
+}
+function renderSchema(){
+  const T=TRACKS[S.track], el=$('#schema'); if(!el) return;
+  let html='<p class="sh">Archive schema</p>';
+  T.schemaView.forEach(t=>{
+    html+='<div class="tbl'+(t.open?' open':'')+'" data-tbl="'+t.name+'"><div class="tn">'+t.name+'</div><ul class="cols">'
+      +t.cols.map(c=>'<li data-col="'+t.name+'.'+c.n+'">'+c.n+'<span class="ty">'+c.t+'</span>'+(c.pk?'<span class="pk">PK</span>':'')+(c.fk?'<span class="fk">→'+c.fk+'</span>':'')+'</li>').join('')
+      +'</ul></div>';
+  });
+  el.innerHTML=html;
+  el.querySelectorAll('.tn').forEach(n=>n.onclick=()=>n.parentElement.classList.toggle('open'));
+  el.querySelectorAll('.cols li').forEach(li=>li.onclick=()=>{ if(cm){ cm.replaceSelection(li.dataset.col.split('.')[1]); cm.focus(); } });
+}
+function sqlDoRun(m){
+  const q=cm.getValue().trim(); if(!q){ gridMsg('Type a query first.','err'); return; }
+  pushHist(q);
+  const r=sqlExec(q);
+  if(!r.ok){ gridMsg('SQL error: '+r.err,'err'); return; }
+  if(!r.result){ gridMsg('OK — statement ran. '+(/^\s*(update|insert|delete)/i.test(q)?'Rows changed. Run a SELECT to inspect.':'No rows returned.'),'ok'); return; }
+  renderGrid(r.result);
+}
+async function sqlDoSubmit(m){
+  const q=cm.getValue().trim(); pushHist(q);
+  const T=TRACKS[S.track];
+  const stageInfo = m.stages?bossStageInfo(m):null;
+  const sol = stageInfo?stageInfo.solution:m.solution;
+  const ordered = stageInfo?stageInfo.ordered:m.ordered;
+  const verify = m.verify;
+  // run learner query on a FRESH db so writes don't poison the check
+  sqlResetDb(T.seed);
+  const lr = sqlExec(q);
+  if(!lr.ok){ gridMsg('SQL error: '+lr.err,'err'); markAllWait(); return; }
+  let learnerRes, solRes;
+  if(verify){ // write-mission: compare verify query after running learner write
+    const v1=sqlExec(verify); learnerRes=v1.result;
+    sqlResetDb(T.seed); sqlExec(sol); const v2=sqlExec(verify); solRes=v2.result;
+  } else {
+    learnerRes = lr.result;
+    sqlResetDb(T.seed); const sr=sqlExec(sol); solRes=sr.result;
+  }
+  sqlResetDb(T.seed); // restore clean for further play
+  const pass = sameResult(learnerRes, solRes, ordered);
+  if(learnerRes) renderGrid(learnerRes);
+  else gridMsg('Your statement returned no result set to compare.','err');
+  markSingle(pass);
+  if(pass){ onSolve(m, null, ()=>gridMsg('Query matches the target result set.','ok')); }
+  else { bumpFail(m, null); gridMsg('Result set does not match the objective yet.','err'); }
+}
+function renderGrid(res){
+  const g=$('#grid');
+  if(!res||!res.columns){ gridMsg('No rows.','muted'); return; }
+  let html='<table class="grid"><thead><tr>'+res.columns.map(c=>'<th>'+esc(c)+'</th>').join('')+'</tr></thead><tbody>';
+  res.values.forEach(r=>{ html+='<tr>'+r.map(v=>v===null?'<td class="null">NULL</td>':'<td>'+esc(String(v))+'</td>').join('')+'</tr>'; });
+  html+='</tbody></table>';
+  g.innerHTML=html;
+  const bar=document.createElement('div'); // row count footer handled in msg
+}
+function gridMsg(t,cls){ $('#grid').innerHTML='<div class="gridmsg '+(cls||'')+'">'+esc(t)+'</div>'; }
+function pushHist(q){ if(!q) return; termHist.unshift(q); termHist=termHist.slice(0,20); const h=$('#hist'); if(h) h.innerHTML=termHist.map(x=>'<div class="hi">'+esc(x.replace(/\s+/g,' ').slice(0,90))+'</div>').join(''); if(h) h.querySelectorAll('.hi').forEach((d,i)=>d.onclick=()=>{cm.setValue(termHist[i]);$('#hist').classList.remove('open');}); }
+function markAllWait(){ $$('#tests .tc').forEach(tc=>tc.className='tc wait'); }
+function markSingle(pass){ const tc=$('#tests .tc'); if(tc) tc.className='tc '+(pass?'pass':'fail'); }
+
+/* ---- Linux terminal ---- */
+function renderTerminal(m){
+  const ws=$('#ws'), T=TRACKS[S.track];
+  ws.innerHTML='<div class="wsbar"><span class="fn">'+(T.term||'deaddrop — bash')+'</span><span class="dots"><i class="r"></i><i class="y"></i><i class="g"></i></span></div>'
+    +'<div class="log" id="log" role="log"></div>'
+    +'<form class="prompt" id="tform" autocomplete="off"><label class="ps" id="ps" for="cmd">$</label>'
+    +'<input id="cmd" type="text" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="send" aria-label="Command"></form>';
+  const log=$('#log');
+  if(!termBooted){ (T.boot||[]).forEach(b=>logLine(b,'sys')); termBooted=true; }
+  $('#ps').textContent=m.prompt||'$';
+  logLine('— '+m.title.toUpperCase()+' —','sys');
+  logLine('Objective: '+m.task,'sys');
+  $('#tform').onsubmit=e=>{ e.preventDefault(); const v=$('#cmd').value; $('#cmd').value=''; termRun(m, v); };
+  $('#cmd').addEventListener('keydown',e=>{
+    if(e.key==='ArrowUp'&&termHist.length){e.preventDefault();termIdx=Math.min(termHist.length-1,termIdx+1);$('#cmd').value=termHist[termIdx]||'';}
+    if(e.key==='ArrowDown'){e.preventDefault();termIdx=Math.max(-1,termIdx-1);$('#cmd').value=termIdx<0?'':termHist[termIdx];}
+  });
+  setTimeout(()=>$('#cmd') && $('#cmd').focus({preventScroll:true}),50);
+}
+let termBooted=false;
+function logLine(t,cls){ if(t===''||t==null) return; const l=$('#log'); const d=document.createElement('div'); d.className=cls||'out'; d.textContent=t; l.appendChild(d); l.scrollTop=l.scrollHeight; }
+function termRun(m, raw){
+  const s=raw.trim(); logLine((m.prompt||'$')+' '+raw,'cmd');
+  if(s){ termHist.unshift(s); termIdx=-1; }
+  const low=s.toLowerCase();
+  if(low==='clear'){ $('#log').innerHTML=''; return; }
+  if(low==='help'){ logLine('hint — nudge · brief — repeat objective · clear — wipe screen','sys'); return; }
+  if(low==='hint'){ doHint(m); const h=(m.hints||[]); return; }
+  if(low==='brief'){ logLine(m.brief,'sys'); logLine('Objective: '+m.task,'sys'); return; }
+  if(!s) return;
+  const ok = runCheck(m.check, s);
+  if(ok){
+    const out = typeof m.out==='function'?m.out(s):m.out;
+    if(out) logLine(out,'out');
+    onSolve(m, null, ()=>{ logLine('ACCESS GRANTED','ok'); });
+  } else {
+    const first=s.split(/\s+/)[0];
+    let msg;
+    const known=['ls','cat','cd','grep','chmod','less','more','head','tail','pwd','bash','sh','find','wc','sort','uniq','echo','./decrypt.sh'];
+    if(TRACKS.linux.unknown && !known.includes(first) && !first.startsWith('./')) msg=TRACKS.linux.unknown(s);
+    else if(first==='pwd') msg='/home/agent';
+    else msg=TRACKS.linux.wrong||'Not the right move.';
+    logLine(msg, first==='pwd'?'out':'err');
+    bumpFail(m, null, true);
+  }
+}
+function runCheck(c, s){ if(typeof c==='function') return c(s); if(c instanceof RegExp) return c.test(s.trim().replace(/;+$/,'')); return false; }
+
+/* ============ SOLVE FLOW ============ */
+function onSolve(m, outEl, after){
+  // boss staging
+  if(m.stages){
+    const si=bossStage[m.id]||0;
+    const st=m.stages[si];
+    if(st.line){ /* intermediate reveal handled via final */ }
+    if(si < m.stages.length-1){
+      const carried = (cm ? cm.getValue() : (savedCode(m.id)||m.starter));
+      const stub = m.stages[si+1].append||'';
+      try{ localStorage.setItem(KEY+':code:'+m.id, carried + stub); }catch(e){}
+      bossStage[m.id]=si+1;
+      S._bossProgress=S._bossProgress||{}; S._bossProgress[m.id]=si+1; save();
+      if(after) after();
+      addXP(25);
+      toast('', '<span class="big">STAGE CLEARED</span><br>Stage '+(si+1)+' of '+m.stages.length+' complete. +25 XP');
+      renderWorkspace(); renderAll();
+      return;
+    }
+  }
+  if(after) after();
+  const already=isSolved(m.id);
+  const x=flat(S.track)[curGi(S.track)];
+  if(!already){
+    S.solved[m.id]=true; S.streak=(S.streak||0)+1;
+    addXP(XP_BY_TIER[x.tn] + (m.boss?40:0));
+    // clean-tier tracking: if no hint used in this tier so far and tier completes
+    save();
+    const el = outEl||document.createElement('div');
+    revealSolveUI(m);
+    checkBadges({track:S.track, tn:x.tn});
+  } else {
+    revealSolveUI(m);
+  }
+  save(); renderAll(true, m.id);
+}
+function revealSolveUI(m){
+  const line = m.line ? m.line.replace('{X}', m.secret) : null;
+  const host = TRACKS[S.track].ui==='term' ? $('#log') : $('#out');
+  if(TRACKS[S.track].ui==='term'){
+    if(line){ const d=document.createElement('div'); d.className='reveal'; d.textContent='DECLASSIFIED ▸ '+line; $('#log').appendChild(d); }
+    if(m.intel&&m.intel.note){ const i=document.createElement('div'); i.className='intel'; i.textContent='Field note: '+m.intel.note; $('#log').appendChild(i); $('#log').scrollTop=$('#log').scrollHeight; }
+    advanceHint(m);
+  } else if(host){
+    if(line){ const d=document.createElement('div'); d.className='reveal'; d.textContent='DECLASSIFIED ▸ '+line; host.appendChild(d); }
+    host.appendChild(line2('ACCESS GRANTED · case file line declassified','ok'));
+    advanceHint(m);
+  }
+  showIntel(m, true);
+}
+function advanceHint(m){} // placeholder (auto-advance handled by nav)
+
+/* next-mission suggestion after solve */
+function renderAll(reveal, revealId){
+  renderHUD(); renderLadder(); renderMission(); renderDossier(reveal?revealId:null); renderCheat();
+  renderAux();
+}
+
+function bumpFail(m, outEl, isTerm){
+  S._fails=S._fails||{}; S._fails[m.id]=(S._fails[m.id]||0)+1;
+  if(S._fails[m.id]===2 && !(S.hintsUsed[m.id])){ if(isTerm) logLine('Stuck? Type hint, or use the HINT button below.','sys'); }
+}
+
+/* ============ HINTS + INTEL ============ */
+function renderAux(){
+  const x=flat(S.track)[curGi(S.track)], m=x.m;
+  const b=$('#auxbtns');
+  b.innerHTML='<button class="btn" id="hintbtn">💡 Hint</button>'
+    +'<button class="btn" id="intelbtn">📖 Field manual</button>'
+    + (isSolved(m.id)&&x.gi<flat(S.track).length-1 ? '<button class="btn submit" id="nextbtn" style="margin-left:auto">Next file ▸</button>' : '');
+  $('#hintbtn').onclick=()=>doHint(m);
+  $('#intelbtn').onclick=()=>{ const el=$('#intelbox'); el.classList.toggle('show'); if(el.classList.contains('show')) showIntel(m); };
+  if($('#nextbtn')) $('#nextbtn').onclick=()=>{ gotoGi(Math.min(flat(S.track).length-1, curGi(S.track)+1)); };
+  // restore hint display state
+  $('#hintbox').classList.remove('show');
+  $('#intelbox').classList.remove('show');
+}
+function doHint(m){
+  S.hintsUsed[m.id]=(S.hintsUsed[m.id]||0)+1; save();
+  const hints=m.hints||[]; const n=Math.min(S.hintsUsed[m.id]-1, hints.length-1);
+  const hb=$('#hintbox'); hb.classList.add('show');
+  hb.innerHTML='<span class="hl">Hint '+(n+1)+' of '+hints.length+'</span>'+esc(hints[n]);
+  if(TRACKS[S.track].ui==='term'){ logLine('HINT: '+hints[n],'sys'); }
+}
+function showIntel(m, inline){
+  const el=$('#intelbox'); const it=m.intel||{};
+  let html='<h4>Field Manual — '+esc(m.title)+'</h4>';
+  if(it.note) html+='<div>'+esc(it.note)+'</div>';
+  if(it.syntax) html+='<pre>'+esc(it.syntax)+'</pre>';
+  if(it.job) html+='<div class="jobnote"><b>On the job:</b> '+esc(it.job)+'</div>';
+  if(it.drill){ html+='<div class="drill"><div class="q">↯ Interview drill: '+esc(it.drill.q)+'</div><button class="reveal-a" id="drillbtn">Reveal answer</button><div class="a" id="drillans">'+esc(it.drill.a)+'</div></div>'; }
+  el.innerHTML=html;
+  if(inline) el.classList.add('show');
+  if($('#drillbtn')) $('#drillbtn').onclick=()=>$('#drillans').classList.toggle('show');
+}
+function showSolution(m){
+  const stageInfo=m.stages?bossStageInfo(m):null;
+  const sol=stageInfo?(stageInfo.full||stageInfo.solution):m.solution;
+  if(cm){ cm.setValue(sol); }
+  S.hintsUsed[m.id]=(S.hintsUsed[m.id]||0)+99; save();
+  const out=$('#out'); if(out) out.innerHTML='<span class="muted">Solution loaded into the editor. Run it to see it work, then Submit.</span>';
+}
+
+/* ============ NAV ============ */
+function gotoGi(gi){
+  const f=flat(S.track); const x=f[gi]; if(!x) return;
+  if(!tierUnlocked(S.track, x.tn)){ toast('','<span class="big">LOCKED</span><br>Clear the previous tier to unlock '+TIER_NAMES[x.tn]+'.'); return; }
+  cur[S.track]=gi; termBooted = TRACKS[S.track].ui!=='term' ? termBooted : termBooted;
+  renderWorkspace(); renderAll();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function switchTrack(t){ S.track=t; save(); if(t==='linux'){ /* fresh terminal */ } renderWorkspace(); renderAll(); }
+
+function line(t,cls){ const d=document.createElement('div'); if(cls) d.className=cls; d.textContent=t; return d; }
+function line2(t,cls){ return line(t,cls); }
+
+/* ============ MODAL (badges) ============ */
+function openBadges(){
+  const s=$('#sheet');
+  s.innerHTML='<h3>Commendations <button id="closem">×</button></h3><div class="sbody"><div class="badgegrid">'
+    +BADGES.map(b=>'<div class="bcard'+(S.badges.includes(b.id)?' earned':'')+'"><div class="bi">'+b.icon+'</div><div class="bn">'+b.name+'</div><div class="bd">'+b.desc+'</div></div>').join('')
+    +'</div></div>';
+  $('#modal').classList.add('show');
+  $('#closem').onclick=()=>$('#modal').classList.remove('show');
+}
+
+function renderCheat(){
+  const T=TRACKS[S.track];
+  const c=$('#cheat');
+  if(T.ui==='term') c.innerHTML='<span>Terminal: <code>hint</code> <code>brief</code> <code>clear</code> <code>help</code></span><span>Progress saves in this browser.</span>';
+  else if(T.ui==='db') c.innerHTML='<span>Click a table/column in the explorer to insert it. <code>Ctrl+Enter</code> runs your query.</span><span>Reset DB restores the snapshot. Progress saves locally.</span>';
+  else c.innerHTML='<span><code>Ctrl+Enter</code> runs your code. Submit checks the acceptance tests.</span><span>Progress saves in this browser.</span>';
+}
+
+/* ============ BOOT ============ */
+async function boot(){
+  // restore boss progress
+  if(S._bossProgress){ Object.assign(bossStage, S._bossProgress); }
+  // tabs
+  $$('.track').forEach(b=>b.onclick=()=>switchTrack(b.dataset.t));
+  $('#ladder').addEventListener('click',e=>{ const r=e.target.closest('.mrow'); if(r&&!r.classList.contains('locked')) gotoGi(+r.dataset.gi); });
+  $('#hud-badges').onclick=openBadges;
+  $('#reset').onclick=()=>{ if(confirm('Reset all progress, XP and badges?')){ try{Object.keys(localStorage).filter(k=>k.startsWith(KEY)).forEach(k=>localStorage.removeItem(k));}catch(e){} location.reload(); } };
+  $('#modal').addEventListener('click',e=>{ if(e.target.id==='modal') $('#modal').classList.remove('show'); });
+
+  // init SQL db
+  try{ await sqlInit(TRACKS.sql.seed); }catch(e){ console.warn('sql init failed', e); }
+  // probe python availability (eval/Function blocked under strict CSP)
+  try{
+    const probe = await pyRun('print(1+1)', 2000);
+    ENG.pyBlocked = !(probe.ok && /2/.test(probe.out));
+  }catch(e){ ENG.pyBlocked = true; }
+
+  renderWorkspace(); renderAll();
+  if(ENG.pyBlocked && S.track==='python'){ /* handled in run UI */ }
+}
+
+boot();
+</script>
+
+</body></html>
